@@ -35,8 +35,10 @@ jobs:
     - name: Execute Automated Test Suite with Coverage Tracking
       run: |
         # Generates terminal outputs, an interactive HTML site, and an XML map
+        # Enforces a strict minimum test coverage baseline barrier of 100%
         pytest tests/ \
           --cov=src \
+          --cov-fail-under=100 \
           --cov-report=term-missing \
           --cov-report=html:htmlcov \
           --cov-report=xml:coverage.xml
