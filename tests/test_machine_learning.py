@@ -29,3 +29,17 @@ def test_pca_projection():
     transformed_data = transformer.fit_transform(data)
 
     assert transformed_data.shape == (5, 1)
+
+
+def test_kmeans_insufficient_data_error():
+    """Verifies that KMeans throws a ValueError if input points are fewer than clusters."""
+    import pytest
+    
+    # Configure an empty or insufficient single coordinate matrix
+    insufficient_data = np.array([[1.0, 1.0]])
+    
+    # Requesting 3 clusters with only 1 data point must trigger our validation guard
+    model = KMeans(k=3)
+    with pytest.raises(ValueError, match="Dataset elements must exceed or match targeted cluster count"):
+        model.fit(insufficient_data)
+
