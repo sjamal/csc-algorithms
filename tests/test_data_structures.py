@@ -20,22 +20,19 @@ def mock_standard_graph():
 def test_dijkstra_routing_matrix(mock_standard_graph):
     """Verifies calculated distance accuracy and predecessor paths match expected models."""
     distances, predecessors = dijkstra(mock_standard_graph, "A")
-    
+
     assert distances["A"] == 0
-    assert distances["B"] == 3   # Optimal path: A -> C -> B (2 + 1)
-    assert distances["E"] == 6   # Optimal path: A -> C -> B -> E (2 + 1 + 3)
-    
+    assert distances["B"] == 3  # Optimal path: A -> C -> B (2 + 1)
+    assert distances["E"] == 6  # Optimal path: A -> C -> B -> E (2 + 1 + 3)
+
     assert predecessors["B"] == "C"
     assert predecessors["D"] == "B"
 
 
 def test_dijkstra_security_vulnerabilities():
     """Ensures input validation layers catch illegal parameters safely."""
-    malicious_graph = {
-        "A": [("B", -5)],
-        "B": []
-    }
-    
+    malicious_graph = {"A": [("B", -5)], "B": []}
+
     with pytest.raises(ValueError, match="Graph contains a negative weight"):
         dijkstra(malicious_graph, "A")
 
@@ -47,13 +44,13 @@ def test_bst_operations():
     """Validates Binary Search Tree structural tracking (Fixed syntax error loop)."""
     bst = BinarySearchTree()
     input_values = [50, 30, 20, 40, 70, 60, 80]
-    
+
     for val in input_values:
         bst.insert(val)
 
     # Validate value detection checks
     assert bst.search(40) is True
     assert bst.search(99) is False
-    
+
     # Confirm in-order traversal results in sorted order
     assert bst.inorder_traversal() == [20, 30, 40, 50, 60, 70, 80]

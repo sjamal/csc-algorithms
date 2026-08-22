@@ -5,6 +5,7 @@ import numpy as np
 
 class KMeans:
     """Partitions dataset samples into K distinct, optimized clusters."""
+
     def __init__(self, k: int, max_iters: int = 100) -> None:
         self.k: int = k
         self.max_iters: int = max_iters
@@ -13,7 +14,9 @@ class KMeans:
     def fit(self, data: np.ndarray) -> np.ndarray:
         """Computes centroids and returns cluster assignments for input vectors."""
         if len(data) < self.k:
-            raise ValueError("Dataset elements must exceed or match targeted cluster count 'k'.")
+            raise ValueError(
+                "Dataset elements must exceed or match targeted cluster count 'k'."
+            )
 
         # Explicitly set random seed to make calculations reproducible across tests
         rng = np.random.default_rng(42)
@@ -25,7 +28,7 @@ class KMeans:
         for _ in range(self.max_iters):
             # Calculate distance between data points and centroids using broadcasting matrix math
             distances = np.linalg.norm(data[:, np.newaxis] - self.centroids, axis=2)
-            
+
             # Map index tracking to nearest centroid
             new_labels = np.argmin(distances, axis=1)
 

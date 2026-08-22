@@ -15,11 +15,11 @@ def kmp_search(text: str, pattern: str) -> List[int]:
         return []
 
     text_len, pattern_len = len(text), len(pattern)
-    
+
     # Precompute the Longest Prefix Suffix (LPS) layout array
     lps = _compute_lps(pattern)
     match_indices: List[int] = []
-    
+
     i = 0  # Text crawling tracker index
     j = 0  # Pattern crawling tracker index
 
@@ -34,7 +34,7 @@ def kmp_search(text: str, pattern: str) -> List[int]:
             match_indices.append(i - j)
             # Rollback pattern tracker back utilizing tracking arrays
             j = lps[j - 1]
-            
+
         # Character mismatch occurred during active tracking
         elif i < text_len and pattern[j] != text[i]:
             if j != 0:
