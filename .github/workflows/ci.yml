@@ -7,7 +7,6 @@ on:
     branches: [ main, develop ]
 
 env:
-  # Suppresses Node.js fallback runtime annotations completely
   ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: "true"
 
 jobs:
@@ -26,15 +25,26 @@ jobs:
     - name: Verify and Install Project Dependencies
       run: |
         python -m pip install --upgrade pip
-        # Fallback to manual setup if requirements.txt isn't in root
+        # Ensure our coverage plugin is fetched explicitly
         if [ -f requirements.txt ]; then
           pip install -r requirements.txt
         else
-          echo "requirements.txt not found in root! Installing core packages directly."
-          pip install pytest numpy black
+          pip install pytest pytest-cov numpy black
         fi
 
-    - name: Execute Automated Test Suite
+    - name: Execute Automated Test Suite with Coverage Tracking
       run: |
-        pytest tests/
+        # Generates terminal outputs, an interactive HTML site, and an XML map
+        pytest tests/ \
+          --cov=src \
+          --cov-report=term-missing \
+          --cov-report=html:htmlcov \
+          --cov-report=xml:coverage.xml
+
+    # Packages the generated interactive HTML site as a downloadable dashboard
+    - name: Upload Core Coverage HTML Dashboard
+      uses: actions/upload-artifact@v4
+      with:
+        name: algorithm-coverage-report
+        path: htmlcov/
 
