@@ -5,6 +5,7 @@ from typing import Optional, List
 
 class BSTNode:
     """Represents a single structural node within a Binary Search Tree."""
+
     def __init__(self, key: int) -> None:
         self.key: int = key
         self.left: Optional[BSTNode] = None
@@ -13,6 +14,7 @@ class BSTNode:
 
 class BinarySearchTree:
     """Standard Binary Search Tree implementing entry mutation operations."""
+
     def __init__(self) -> None:
         self.root: Optional[BSTNode] = None
 
@@ -48,7 +50,7 @@ class BinarySearchTree:
         # Base case: Exact value found
         if current.key == key:
             return True
-            
+
         # Tail call down target branch pathways
         if key < current.key:
             return self._search_recursive(current.left, key)

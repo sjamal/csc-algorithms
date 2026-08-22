@@ -5,6 +5,7 @@ import numpy as np
 
 class PCA:
     """Reduces dataset dimensionality while maximizing architectural variance."""
+
     def __init__(self, n_components: int) -> None:
         self.n_components: int = n_components
         self.components: np.ndarray = np.array([])
@@ -27,7 +28,7 @@ class PCA:
         sorted_eigenvectors = eigenvectors[:, sorted_indices]
 
         # Extract selected principal components based on configured bounds
-        self.components = sorted_eigenvectors[:, :self.n_components]
+        self.components = sorted_eigenvectors[:, : self.n_components]
 
         # Project the original data onto the component vectors
         return np.dot(centered_data, self.components)

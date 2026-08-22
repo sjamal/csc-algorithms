@@ -40,7 +40,7 @@ def dijkstra(
             # Guard clause against malicious or invalid negative edge injections
             if weight < 0:
                 raise ValueError("Graph contains a negative weight; execution halted.")
-                
+
             distance = current_distance + weight
 
             # Optimal node discovery progression

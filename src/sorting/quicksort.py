@@ -24,7 +24,7 @@ def _quicksort_helper(array: List[int], low: int, high: int) -> None:
     if low < high:
         # Resolve partition array division point
         pivot_index = _partition(array, low, high)
-        
+
         # Concurrently process split sub-problems via the call stack
         _quicksort_helper(array, low, pivot_index)
         _quicksort_helper(array, pivot_index + 1, high)
@@ -59,4 +59,3 @@ def _partition(array: List[int], low: int, high: int) -> int:
 
         # Swap elements at the out-of-order pointer locations
         array[i], array[j] = array[j], array[i]
-
