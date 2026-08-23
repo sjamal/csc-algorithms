@@ -7,6 +7,7 @@ A structured repository dedicated to implementing, analyzing, and documenting fo
 * `src/`: Core Python implementations categorized by algorithmic domain.
 * `tests/`: Automated unit tests mirroring the codebase layout to validate edge cases and performance boundaries.
 * `docs/adr/`: Architectural Decision Records tracking the design choices for each algorithm.
+* `docs/CONTRIBUTING.md`: Step-by-step branching, testing, and PR/merge workflow guide.
 
 ## Getting Started
 
