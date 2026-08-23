@@ -58,6 +58,8 @@ The architectural choices, trade-offs, and design patterns for each algorithm ar
 * [ADR 0004: Recursive Node-Pointer Binary Search Tree](docs/adr/0004-recursive-node-pointer-binary-search-tree.md)
 * [ADR 0005: NumPy Vectorized K-Means Clustering](docs/adr/0005-numpy-vectorized-k-means-clustering.md)
 * [ADR 0006: NumPy eigh Covariance PCA](docs/adr/0006-numpy-eigh-covariance-principal-component-analysis.md)
+* [ADR 0007: Edge-List Relaxation for Bellman-Ford](docs/adr/0007-use-edge-list-relaxation-for-bellman-ford.md)
+* [ADR 0008: Euclidean Heuristic for A* Pathfinding](docs/adr/0008-use-euclidean-heuristic-for-a-star.md)
 
 ---
 
@@ -75,5 +77,7 @@ To ensure uniformity, this repository follows strict standards derived from **PE
 2. **Denial of Service (DoS) Boundaries:** Quicksort worst-case scaling behavior is $O(n^2)$. For safety-critical systems sorting untrusted or adversarial user inputs, randomizing the pivot selection or utilizing `heap-sort`/`merge-sort` derivatives should be considered.
 3. **Graph Payload Resilience:** The Dijkstra parser explicitly references data isolation using explicit `float("inf")` typing arrays. Node configurations must strictly pass hashable unique strings to mitigate graph processing collision events.
 4. **Data Isolation:** This package operates entirely locally on internal operational states. No logging pipelines, web tracing, or environment data tracking hooks are implemented, ensuring maximum data privacy.
+5. **Negative-Weight Cycle Guarding:** The Bellman-Ford implementation runs an explicit final relaxation pass to detect reachable negative-weight cycles and raises a `ValueError` rather than allowing an untrusted graph payload to loop indefinitely.
+6. **Heuristic Input Validation:** The A* implementation validates that source, target, and coordinate metadata exist before search begins, and rejects negative edge weights, preventing malformed spatial graphs from corrupting the heuristic scoring.
 
 
