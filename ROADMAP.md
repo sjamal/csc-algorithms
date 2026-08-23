@@ -30,7 +30,7 @@ This document serves as the long-term architectural roadmap for this learning re
 *   **Singly Linked List**: Pointer-chained sequential collection supporting traversal, insertion, and reversal operations. (Completed)
 
 ### Phase 5: Dynamic Programming & Sequence Analysis
-*   **0/1 Knapsack Problem**: Tabular matrix memoization framework designed to resolve finite profit boundaries.
+*   **0/1 Knapsack Problem**: Tabular matrix memoization framework designed to resolve finite profit boundaries. (Completed)
 *   **Longest Common Subsequence (LCS)**: Relational alignment mapping tracking matching sub-segments within strings.
 
 ---

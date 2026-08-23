@@ -90,6 +90,7 @@ The architectural choices, trade-offs, and design patterns for each algorithm ar
 * [ADR 0013: Union by Rank with Path Compression for Union-Find](docs/adr/0013-use-union-by-rank-with-path-compression-for-union-find.md)
 * [ADR 0014: Bottom-Up Divide-and-Conquer Merge for Merge Sort](docs/adr/0014-use-bottom-up-divide-and-conquer-merge-for-merge-sort.md)
 * [ADR 0015: Iterative Pointer Rewiring for Singly Linked List Reversal](docs/adr/0015-use-iterative-pointer-rewiring-for-singly-linked-list-reversal.md)
+* [ADR 0016: Bottom-Up Tabulation with Backtracking for 0/1 Knapsack](docs/adr/0016-use-bottom-up-tabulation-with-backtracking-for-01-knapsack.md)
 
 ---
 
@@ -117,3 +118,4 @@ To ensure uniformity, this repository follows strict standards derived from **PE
 12. **Fixed Element Universe:** Union-Find validates every `find()`/`union()` call against its initial element set and raises a `ValueError` for unknown elements, preventing silent creation of untracked entries.
 13. **Worst-Case DoS Mitigation:** Merge Sort guarantees $O(n \log n)$ even on adversarial input, making it the safer default over Quicksort when sorting untrusted, attacker-influenced data where worst-case scaling matters.
 14. **Bounded Traversal Footprint:** The Singly Linked List's `search`/`delete`/`reverse` operations are strictly O(n) iterative walks with no recursion, preventing stack-depth exhaustion on very large untrusted input lists.
+15. **Iterative DP, No Recursion Limits:** The 0/1 Knapsack solver uses bottom-up tabulation rather than top-down recursion, avoiding Python's `RecursionError` on large item counts.

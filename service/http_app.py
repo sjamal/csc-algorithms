@@ -53,6 +53,12 @@ class LinkedListRequest(BaseModel):
     reverse: bool = False
 
 
+class KnapsackRequest(BaseModel):
+    weights: List[int]
+    values: List[int]
+    capacity: int
+
+
 class WeightedGraphRequest(BaseModel):
     graph: Dict[str, List[List[object]]]
     source: str
@@ -142,6 +148,14 @@ def build_and_query_linked_list(request: LinkedListRequest) -> Dict:
         request.values,
         request.search_for,
         request.reverse,
+    )
+
+
+@app.post("/dynamic-programming/knapsack")
+def dp_knapsack_01(request: KnapsackRequest) -> Dict:
+    """Selects a subset of items maximizing total value within a fixed weight capacity."""
+    return _call(
+        tools.dp_knapsack_01, request.weights, request.values, request.capacity
     )
 
 
