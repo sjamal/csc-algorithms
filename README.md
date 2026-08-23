@@ -5,6 +5,7 @@ A structured repository dedicated to implementing, analyzing, and documenting fo
 ## Project Structure
 
 * `src/`: Core Python implementations categorized by algorithmic domain.
+* `service/`: Transport-agnostic wrappers exposing the algorithms via an MCP stdio server and a FastAPI HTTP API.
 * `tests/`: Automated unit tests mirroring the codebase layout to validate edge cases and performance boundaries.
 * `docs/adr/`: Architectural Decision Records tracking the design choices for each algorithm.
 * `docs/CONTRIBUTING.md`: Step-by-step branching, testing, and PR/merge workflow guide.
@@ -49,10 +50,31 @@ To run syntax and style validation checks using `flake8` or `black`:
 black --check src/ tests/
 ```
 
+## Running the Service Layer
+
+Every algorithm is also exposed via a stateless MCP server and a REST API, both backed by the same `service/tools.py` wrapper functions.
+
+**MCP server (stdio transport)** — for use with MCP-aware agents/chat clients (Claude Desktop, VS Code, etc.):
+
+```bash
+python -m service.mcp_server
+```
+
+Register it with your MCP client by pointing it at this command; consult your client's documentation for its `mcp.json`/config format.
+
+**HTTP API** — for any other programmatic caller:
+
+```bash
+uvicorn service.http_app:app --reload
+```
+
+Each endpoint mirrors an MCP tool, e.g. `POST /sorting/quicksort`, `POST /graphs/dijkstra`, `POST /machine-learning/kmeans`. Interactive OpenAPI docs are available at `http://127.0.0.1:8000/docs` once the server is running.
+
 ## Architectural Decision Records (ADRs)
 
 The architectural choices, trade-offs, and design patterns for each algorithm are fully documented below:
 
+* [ADR 0000: Expose Algorithms via MCP and HTTP Service Layer](docs/adr/0000-expose-algorithms-via-mcp-and-http-service-layer.md)
 * [ADR 0001: Hoare Partitioning for Quicksort](docs/adr/0001-use-hoare-partitioning-for-quicksort.md)
 * [ADR 0002: heapq for Dijkstra Priority Queue](docs/adr/0002-use-heapq-for-dijkstra-priority-queue.md)
 * [ADR 0003: LPS Array for KMP String Matching](docs/adr/0003-use-lps-array-for-kmp-string-matching.md)
@@ -88,4 +110,5 @@ To ensure uniformity, this repository follows strict standards derived from **PE
 8. **Codebook Integrity Validation:** The Huffman decoder rejects malformed or duplicate-code codebooks and dangling/invalid bitstreams with an explicit `ValueError`, rather than silently returning corrupted or truncated text.
 9. **Cycle & Referential Integrity Guards:** Topological Sort validates that every edge references a declared node and raises a `ValueError` when a cycle prevents a complete ordering, rather than silently returning a partial or misleading sequence.
 10. **Bounded Memory Allocation:** The Sieve of Eratosthenes allocates its boolean tracking array based on the caller-supplied boundary; callers should validate untrusted boundary inputs against a sane upper limit before use to avoid excessive memory allocation.
+11. **Service Layer Input Validation:** The HTTP API validates request bodies via Pydantic schemas and translates algorithm-level `ValueError`s into HTTP 400 responses rather than leaking stack traces; both the MCP server and HTTP API are stateless per call, so no client-supplied data persists across requests.
 
