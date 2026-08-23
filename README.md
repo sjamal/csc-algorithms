@@ -50,6 +50,8 @@ To run syntax and style validation checks using `flake8` or `black`:
 black --check src/ tests/
 ```
 
+For the full test and coverage gate, run `make verify`. Local commits use the tracked `.githooks/pre-commit` hook for fast staged-area tests by default; use `TEST_SCOPE=full git commit` to run the complete 100% coverage gate before committing.
+
 ## Running the Service Layer
 
 Every algorithm is also exposed via a stateless MCP server and a REST API, both backed by the same `service/tools.py` wrapper functions.
