@@ -16,6 +16,7 @@ def test_mcp_tool_registry_contains_all_algorithms():
 
     assert registered_names == {
         "sort_quicksort",
+        "sort_merge_sort",
         "search_kmp",
         "build_and_query_bst",
         "build_and_query_avl_tree",
@@ -35,6 +36,11 @@ def test_mcp_tool_registry_contains_all_algorithms():
 def test_mcp_sort_quicksort():
     """Verifies the Quicksort tool returns an ascending-order list."""
     assert mcp_server.sort_quicksort([5, 2, 4, 1, 3]) == [1, 2, 3, 4, 5]
+
+
+def test_mcp_sort_merge_sort():
+    """Verifies the Merge Sort tool returns an ascending-order list."""
+    assert mcp_server.sort_merge_sort([5, 2, 4, 1, 3]) == [1, 2, 3, 4, 5]
 
 
 def test_mcp_search_kmp():

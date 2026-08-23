@@ -28,6 +28,12 @@ def sort_quicksort(values: List[int]) -> List[int]:
 
 
 @mcp.tool()
+def sort_merge_sort(values: List[int]) -> List[int]:
+    """Sorts a list of integers in ascending order using Merge Sort."""
+    return tools.sort_merge_sort(values)
+
+
+@mcp.tool()
 def search_kmp(text: str, pattern: str) -> List[int]:
     """Finds every 0-indexed starting position of `pattern` within `text`."""
     return tools.search_kmp(text, pattern)

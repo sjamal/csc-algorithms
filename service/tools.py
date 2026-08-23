@@ -23,6 +23,7 @@ from src.graphs.topological_sort import topological_sort
 from src.machine_learning.kmeans import KMeans
 from src.machine_learning.pca import PCA
 from src.numeric.sieve import sieve_of_eratosthenes
+from src.sorting.merge_sort import merge_sort
 from src.sorting.quicksort import quicksort
 from src.string_matching.kmp import kmp_search
 
@@ -42,6 +43,11 @@ def _to_adjacency_tuples(
 def sort_quicksort(values: List[int]) -> List[int]:
     """Sorts a list of integers in ascending order via Quicksort."""
     return quicksort(values)
+
+
+def sort_merge_sort(values: List[int]) -> List[int]:
+    """Sorts a list of integers in ascending order via Merge Sort."""
+    return merge_sort(values)
 
 
 def search_kmp(text: str, pattern: str) -> List[int]:

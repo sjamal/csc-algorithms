@@ -14,6 +14,13 @@ def test_http_sort_quicksort():
     assert response.json() == [1, 2, 3, 4, 5]
 
 
+def test_http_sort_merge_sort():
+    """Verifies the Merge Sort endpoint returns an ascending-order list."""
+    response = client.post("/sorting/merge-sort", json={"values": [5, 2, 4, 1, 3]})
+    assert response.status_code == 200
+    assert response.json() == [1, 2, 3, 4, 5]
+
+
 def test_http_search_kmp():
     """Verifies the KMP search endpoint returns matching start indices."""
     response = client.post(
