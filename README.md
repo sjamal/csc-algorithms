@@ -94,6 +94,7 @@ The architectural choices, trade-offs, and design patterns for each algorithm ar
 * [ADR 0017: Bottom-Up Tabulation with Diagonal Backtracking for LCS](docs/adr/0017-use-bottom-up-tabulation-with-diagonal-backtracking-for-lcs.md)
 * [ADR 0018: Binary Max-Heap for Heap Sort](docs/adr/0018-use-binary-max-heap-for-heap-sort.md)
 * [ADR 0019: Iterative Midpoint Bisection for Binary Search](docs/adr/0019-use-iterative-midpoint-bisection-for-binary-search.md)
+* [ADR 0020: Iterative Queue and Stack for BFS and DFS](docs/adr/0020-use-iterative-queue-and-stack-for-bfs-dfs.md)
 
 ---
 
@@ -125,3 +126,4 @@ To ensure uniformity, this repository follows strict standards derived from **PE
 16. **Quadratic Complexity Awareness:** LCS runs in $O(n \times m)$ time and space; callers should bound input string lengths when comparing untrusted, attacker-controlled text to avoid excessive memory allocation on very large inputs.
 17. **In-Place Worst-Case Guarantee:** Heap Sort provides the same $O(n \log n)$ worst-case guarantee as Merge Sort but with $O(1)$ auxiliary space, useful when both adversarial-input resilience and memory constraints matter simultaneously.
 18. **Precondition Responsibility:** Binary Search assumes sorted input and does not validate it; callers must guarantee sortedness themselves, since verifying it would negate the algorithm's logarithmic performance advantage.
+19. **Traversal Input Integrity:** BFS and DFS validate the source and every adjacency reference before traversal, preventing malformed graph payloads from producing partial results; both use iterative state to avoid recursion-depth exhaustion.

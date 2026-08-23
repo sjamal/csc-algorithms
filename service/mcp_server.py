@@ -123,6 +123,18 @@ def graph_topological_sort(graph: Dict[str, List[str]]) -> Dict:
 
 
 @mcp.tool()
+def graph_breadth_first_search(graph: Dict[str, List[str]], source: str) -> Dict:
+    """Traverses a graph level by level from `source` using BFS."""
+    return tools.graph_breadth_first_search(graph, source)
+
+
+@mcp.tool()
+def graph_depth_first_search(graph: Dict[str, List[str]], source: str) -> Dict:
+    """Traverses a graph depth first from `source` using an explicit stack."""
+    return tools.graph_depth_first_search(graph, source)
+
+
+@mcp.tool()
 def compress_huffman_encode(text: str) -> Dict:
     """Compresses text into a bitstring using greedily-built variable-length codes."""
     return tools.compress_huffman_encode(text)

@@ -22,6 +22,8 @@ from src.dynamic_programming.knapsack import knapsack_01
 from src.dynamic_programming.lcs import longest_common_subsequence
 from src.graphs.a_star import a_star
 from src.graphs.bellman_ford import bellman_ford
+from src.graphs.breadth_first_search import breadth_first_search
+from src.graphs.depth_first_search import depth_first_search
 from src.graphs.topological_sort import topological_sort
 from src.machine_learning.kmeans import KMeans
 from src.machine_learning.pca import PCA
@@ -173,6 +175,16 @@ def graph_a_star(
 def graph_topological_sort(graph: Dict[str, List[str]]) -> Dict:
     """Orders nodes such that every directed edge points from earlier to later."""
     return {"order": topological_sort(graph)}
+
+
+def graph_breadth_first_search(graph: Dict[str, List[str]], source: str) -> Dict:
+    """Traverses a graph level by level from `source` using BFS."""
+    return {"order": breadth_first_search(graph, source)}
+
+
+def graph_depth_first_search(graph: Dict[str, List[str]], source: str) -> Dict:
+    """Traverses a graph depth first from `source` using an explicit stack."""
+    return {"order": depth_first_search(graph, source)}
 
 
 def compress_huffman_encode(text: str) -> Dict:
