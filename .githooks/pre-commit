@@ -1,0 +1,87 @@
+#!/bin/bash
+
+set -e
+
+repo_root=$(git rev-parse --show-toplevel)
+cd "$repo_root"
+
+if [ ! -f requirements.txt ]; then
+    echo "Error: requirements.txt is missing from the repository root."
+    exit 1
+fi
+
+echo "Checking code style with Black..."
+make format-check
+
+if [ -n "${TEST_FILES:-}" ]; then
+    echo "Running selected tests from TEST_FILES..."
+    make test-fast TEST_FILES="$TEST_FILES"
+elif [ "${TEST_SCOPE:-fast}" = "full" ]; then
+    echo "Running the full test and coverage gate..."
+    make test-full
+else
+    staged_tests=()
+    unknown_python_change=0
+
+    while IFS= read -r path; do
+        case "$path" in
+            tests/test_*.py)
+                staged_tests+=("$path")
+                ;;
+            src/compression/*)
+                staged_tests+=("tests/test_compression.py")
+                ;;
+            src/data_structures/*)
+                staged_tests+=("tests/test_data_structures.py")
+                staged_tests+=("tests/test_service_tools.py" "tests/test_service_mcp_server.py" "tests/test_service_http_app.py")
+                ;;
+            src/dynamic_programming/*)
+                staged_tests+=("tests/test_dynamic_programming.py")
+                staged_tests+=("tests/test_service_tools.py" "tests/test_service_mcp_server.py" "tests/test_service_http_app.py")
+                ;;
+            src/graphs/*)
+                staged_tests+=("tests/test_graphs.py")
+                staged_tests+=("tests/test_service_tools.py" "tests/test_service_mcp_server.py" "tests/test_service_http_app.py")
+                ;;
+            src/machine_learning/*)
+                staged_tests+=("tests/test_machine_learning.py")
+                staged_tests+=("tests/test_service_tools.py" "tests/test_service_mcp_server.py" "tests/test_service_http_app.py")
+                ;;
+            src/numeric/*)
+                staged_tests+=("tests/test_numeric.py")
+                staged_tests+=("tests/test_service_tools.py" "tests/test_service_mcp_server.py" "tests/test_service_http_app.py")
+                ;;
+            src/searching/*)
+                staged_tests+=("tests/test_searching.py")
+                staged_tests+=("tests/test_service_tools.py" "tests/test_service_mcp_server.py" "tests/test_service_http_app.py")
+                ;;
+            src/sorting/*)
+                staged_tests+=("tests/test_sorting.py")
+                staged_tests+=("tests/test_service_tools.py" "tests/test_service_mcp_server.py" "tests/test_service_http_app.py")
+                ;;
+            src/string_matching/*)
+                staged_tests+=("tests/test_string_matching.py")
+                staged_tests+=("tests/test_service_tools.py" "tests/test_service_mcp_server.py" "tests/test_service_http_app.py")
+                ;;
+            service/*)
+                staged_tests+=("tests/test_service_tools.py" "tests/test_service_mcp_server.py" "tests/test_service_http_app.py")
+                ;;
+            *.py)
+                unknown_python_change=1
+                ;;
+        esac
+    done < <(git diff --cached --name-only --diff-filter=ACMR)
+
+    if [ "$unknown_python_change" -eq 1 ]; then
+        echo "Running the full test suite for an unmapped Python change..."
+        make test-full
+    elif [ "${#staged_tests[@]}" -eq 0 ]; then
+        echo "No staged Python changes; skipping tests."
+    else
+        unique_tests=($(printf '%s\n' "${staged_tests[@]}" | sort -u))
+        echo "Running staged-area tests: ${unique_tests[*]}"
+        make test-fast TEST_FILES="${unique_tests[*]}"
+    fi
+fi
+
+echo "Pre-commit checks passed."

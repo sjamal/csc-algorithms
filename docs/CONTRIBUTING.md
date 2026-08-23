@@ -13,6 +13,8 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+Do not commit credentials, local environment files, private keys, coverage reports, or logs. The repository ignores common forms of these files; review `git status` and `git diff --cached` before pushing, and use environment variables for any local secrets.
+
 `.venv/` is self-ignored (it ships its own `.gitignore`), so it never needs to be added to the repo's ignore rules. Use `.venv/bin/pytest`, `.venv/bin/black`, etc. if the venv isn't activated in your shell.
 
 > **Two Python environments exist.** The local pre-commit hook (see Section 4) runs `pytest`/`black` from a separate, globally-installed interpreter — not `.venv`. If you add a new dependency (e.g. to `service/`), install it in **both** places, or the hook will fail with `ModuleNotFoundError` at commit time:
@@ -43,14 +45,27 @@ Each new algorithm addition should include, as applicable:
 
 ## 4. Formatting & Local Verification
 
-Run these before committing — a pre-commit hook enforces them anyway, but running locally first avoids failed commits:
+The tracked `.githooks/pre-commit` hook runs Black plus tests related to staged Python files by default. Install it for a clone with:
 
 ```bash
-.venv/bin/black src/ tests/ service/
-.venv/bin/pytest tests/ --cov=src --cov=service --cov-report=term-missing
+git config core.hooksPath .githooks
 ```
 
-Confirm the coverage report shows 100% for all modified/added files.
+Use the fast default for normal commits. To run specific tests:
+
+```bash
+TEST_FILES="tests/test_graphs.py" git commit
+```
+
+To run the complete repository gate locally:
+
+```bash
+TEST_SCOPE=full git commit
+# or, without committing:
+make verify
+```
+
+The full gate enforces 100% coverage across `src` and `service`; selective tests are intended for quick local feedback, while CI always runs the full gate.
 
 ## 5. Committing
 
@@ -107,8 +122,9 @@ git fetch origin --prune                          # clears stale remote-tracking
 |---|---|
 | Sync main | `git checkout main && git pull origin main` |
 | New branch | `git checkout -b feature/<name>` |
-| Format | `.venv/bin/black src/ tests/ service/` |
-| Test + coverage | `.venv/bin/pytest tests/ --cov=src --cov=service --cov-report=term-missing` |
+| Install hooks | `git config core.hooksPath .githooks` |
+| Fast selected tests | `TEST_FILES="tests/test_graphs.py" git commit` |
+| Full test + coverage | `TEST_SCOPE=full git commit` or `make verify` |
 | Push | `git push -u origin <branch>` |
 | Open PR | `gh pr create --title "..." --body "..." --base main --head <branch>` |
 | Merge PR | `gh pr merge --squash --delete-branch` |
