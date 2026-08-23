@@ -22,6 +22,7 @@ def test_mcp_tool_registry_contains_all_algorithms():
         "build_and_query_avl_tree",
         "build_and_query_union_find",
         "build_and_query_linked_list",
+        "dp_knapsack_01",
         "graph_dijkstra",
         "graph_bellman_ford",
         "graph_a_star",
@@ -79,6 +80,14 @@ def test_mcp_build_and_query_linked_list():
         [1, 2, 3], search_for=2, reverse=True
     )
     assert result == {"values": [3, 2, 1], "found": True}
+
+
+def test_mcp_dp_knapsack_01():
+    """Verifies the Knapsack tool returns the optimal value and selected item indices."""
+    result = mcp_server.dp_knapsack_01(
+        weights=[1, 3, 4, 5], values=[1, 4, 5, 7], capacity=7
+    )
+    assert result == {"max_value": 9, "selected_indices": [1, 2]}
 
 
 def test_mcp_graph_dijkstra():

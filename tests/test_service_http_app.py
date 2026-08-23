@@ -75,6 +75,16 @@ def test_http_build_and_query_linked_list():
     assert response.json() == {"values": [3, 2, 1], "found": True}
 
 
+def test_http_dp_knapsack_01():
+    """Verifies the Knapsack endpoint returns the optimal value and selected indices."""
+    response = client.post(
+        "/dynamic-programming/knapsack",
+        json={"weights": [1, 3, 4, 5], "values": [1, 4, 5, 7], "capacity": 7},
+    )
+    assert response.status_code == 200
+    assert response.json() == {"max_value": 9, "selected_indices": [1, 2]}
+
+
 def test_http_graph_dijkstra():
     """Verifies the Dijkstra endpoint computes shortest path distances."""
     response = client.post(
