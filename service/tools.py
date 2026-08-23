@@ -1,0 +1,138 @@
+"""Transport-agnostic wrapper functions adapting src/ algorithms to JSON-friendly I/O.
+
+This module contains no algorithmic logic of its own — it only translates between
+plain JSON-serializable primitives (dict/list/str/int/float) and the native
+Python/NumPy types expected by the underlying `src/` implementations. Both the
+MCP server (service/mcp_server.py) and the HTTP API (service/http_app.py) call
+into these same functions, ensuring both transports return identical results.
+"""
+
+from typing import Dict, List, Optional, Tuple, Union
+
+import numpy as np
+
+from src.compression.huffman import decode as _huffman_decode
+from src.compression.huffman import encode as _huffman_encode
+from src.data_structures.avl_tree import AVLTree
+from src.data_structures.bst import BinarySearchTree
+from src.data_structures.dijkstra import dijkstra
+from src.graphs.a_star import a_star
+from src.graphs.bellman_ford import bellman_ford
+from src.graphs.topological_sort import topological_sort
+from src.machine_learning.kmeans import KMeans
+from src.machine_learning.pca import PCA
+from src.numeric.sieve import sieve_of_eratosthenes
+from src.sorting.quicksort import quicksort
+from src.string_matching.kmp import kmp_search
+
+WeightedGraph = Dict[str, List[List[Union[str, float]]]]
+
+
+def _to_adjacency_tuples(
+    graph: WeightedGraph,
+) -> Dict[str, List[Tuple[str, Union[int, float]]]]:
+    """Converts JSON-friendly `[neighbor, weight]` edge lists into tuple form."""
+    return {
+        node: [(neighbor, weight) for neighbor, weight in edges]
+        for node, edges in graph.items()
+    }
+
+
+def sort_quicksort(values: List[int]) -> List[int]:
+    """Sorts a list of integers in ascending order via Quicksort."""
+    return quicksort(values)
+
+
+def search_kmp(text: str, pattern: str) -> List[int]:
+    """Finds every 0-indexed starting position of `pattern` within `text`."""
+    return kmp_search(text, pattern)
+
+
+def build_and_query_bst(values: List[int], search_for: Optional[int] = None) -> Dict:
+    """Builds a Binary Search Tree from `values` and reports its sorted layout."""
+    tree = BinarySearchTree()
+    for value in values:
+        tree.insert(value)
+
+    result: Dict = {"inorder": tree.inorder_traversal()}
+    if search_for is not None:
+        result["found"] = tree.search(search_for)
+    return result
+
+
+def build_and_query_avl_tree(
+    values: List[int], search_for: Optional[int] = None
+) -> Dict:
+    """Builds an AVL Tree from `values` and reports its balanced sorted layout."""
+    tree = AVLTree()
+    for value in values:
+        tree.insert(value)
+
+    result: Dict = {
+        "inorder": tree.inorder_traversal(),
+        "height": tree.root.height if tree.root else 0,
+    }
+    if search_for is not None:
+        result["found"] = tree.search(search_for)
+    return result
+
+
+def graph_dijkstra(graph: WeightedGraph, source: str) -> Dict:
+    """Computes single-source shortest paths using Dijkstra's algorithm."""
+    distances, predecessors = dijkstra(_to_adjacency_tuples(graph), source)
+    return {"distances": distances, "predecessors": predecessors}
+
+
+def graph_bellman_ford(graph: WeightedGraph, source: str) -> Dict:
+    """Computes single-source shortest paths, tolerating negative edge weights."""
+    distances, predecessors = bellman_ford(_to_adjacency_tuples(graph), source)
+    return {"distances": distances, "predecessors": predecessors}
+
+
+def graph_a_star(
+    graph: WeightedGraph,
+    positions: Dict[str, List[float]],
+    source: str,
+    target: str,
+) -> Dict:
+    """Finds the lowest-cost path between two nodes using heuristic-guided search."""
+    typed_positions = {node: tuple(coords) for node, coords in positions.items()}
+    path, cost = a_star(_to_adjacency_tuples(graph), typed_positions, source, target)
+    return {"path": path, "cost": cost}
+
+
+def graph_topological_sort(graph: Dict[str, List[str]]) -> Dict:
+    """Orders nodes such that every directed edge points from earlier to later."""
+    return {"order": topological_sort(graph)}
+
+
+def compress_huffman_encode(text: str) -> Dict:
+    """Compresses text into a bitstring using greedily-built variable-length codes."""
+    encoded_bits, codebook = _huffman_encode(text)
+    return {"encoded_bits": encoded_bits, "codebook": codebook}
+
+
+def compress_huffman_decode(encoded_bits: str, codebook: Dict[str, str]) -> Dict:
+    """Reconstructs the original text from an encoded bitstring and its codebook."""
+    return {"text": _huffman_decode(encoded_bits, codebook)}
+
+
+def numeric_sieve_of_eratosthenes(limit: int) -> Dict:
+    """Returns every prime number in the inclusive range [2, limit]."""
+    return {"primes": sieve_of_eratosthenes(limit)}
+
+
+def ml_kmeans_cluster(points: List[List[float]], k: int, max_iters: int = 100) -> Dict:
+    """Partitions data points into `k` clusters, returning labels and centroids."""
+    data = np.array(points, dtype=float)
+    model = KMeans(k=k, max_iters=max_iters)
+    labels = model.fit(data)
+    return {"labels": labels.tolist(), "centroids": model.centroids.tolist()}
+
+
+def ml_pca_project(points: List[List[float]], n_components: int) -> Dict:
+    """Projects data points onto their top `n_components` principal components."""
+    data = np.array(points, dtype=float)
+    model = PCA(n_components=n_components)
+    projected = model.fit_transform(data)
+    return {"projected_points": projected.tolist()}

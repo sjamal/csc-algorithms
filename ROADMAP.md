@@ -35,6 +35,11 @@ This document serves as the long-term architectural roadmap for this learning re
 
 ---
 
+## 🔌 Cross-Cutting: Interoperability
+*   **MCP Server & HTTP API**: Transport-agnostic `service/` layer exposing every implemented algorithm as a stateless MCP tool (stdio) and a REST endpoint (FastAPI), for consumption by agents, chat clients, and other programmatic callers. (Completed)
+
+---
+
 ## ⚙️ Automated Quality Thresholds
 Each addition from this roadmap must strive to maintain good engineering standards before being integrated into `main`:
 1.  **Strict Compliance**: Explicit adherence to PEP 8 syntax formatting protocols checked via local hooks.
