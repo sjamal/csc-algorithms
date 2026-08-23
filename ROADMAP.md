@@ -15,8 +15,8 @@ This document serves as the long-term architectural roadmap for this learning re
 *   **Principal Component Analysis (PCA)**: Feature extraction utilizing covariance eigenvalue transformations.
 
 ### Phase 2: Advanced Graph Networks & Navigation
-*   **Bellman-Ford Algorithm**: Shortest path matrix solver capable of handling negative edge weight systems.
-*   **A* Pathfinding Optimization**: Heuristic-driven spatial routing designed for rapid topological traversal.
+*   **Bellman-Ford Algorithm**: Shortest path matrix solver capable of handling negative edge weight systems. (Completed)
+*   **A* Pathfinding Optimization**: Heuristic-driven spatial routing designed for rapid topological traversal. (Completed)
 
 ### Phase 3: Self-Balancing Trees & Data Compression
 *   **AVL or Red-Black Trees**: Self-adjusting trees that maintain a maximum $O(\log n)$ runtime depth across adversarial data sets.
