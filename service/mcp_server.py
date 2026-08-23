@@ -48,6 +48,14 @@ def build_and_query_avl_tree(
 
 
 @mcp.tool()
+def build_and_query_union_find(
+    elements: List[str], unions: List[List[str]], query: Optional[List[str]] = None
+) -> Dict:
+    """Builds a Union-Find over `elements`, applies `unions`, and returns resulting groups."""
+    return tools.build_and_query_union_find(elements, unions, query)
+
+
+@mcp.tool()
 def graph_dijkstra(graph: tools.WeightedGraph, source: str) -> Dict:
     """Computes single-source shortest paths using Dijkstra's algorithm."""
     return tools.graph_dijkstra(graph, source)

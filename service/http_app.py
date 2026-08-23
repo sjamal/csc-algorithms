@@ -41,6 +41,12 @@ class TreeQueryRequest(BaseModel):
     search_for: Optional[int] = None
 
 
+class UnionFindRequest(BaseModel):
+    elements: List[str]
+    unions: List[List[str]]
+    query: Optional[List[str]] = None
+
+
 class WeightedGraphRequest(BaseModel):
     graph: Dict[str, List[List[object]]]
     source: str
@@ -103,6 +109,17 @@ def build_and_query_bst(request: TreeQueryRequest) -> Dict:
 def build_and_query_avl_tree(request: TreeQueryRequest) -> Dict:
     """Builds a self-balancing AVL Tree and returns its layout/height."""
     return _call(tools.build_and_query_avl_tree, request.values, request.search_for)
+
+
+@app.post("/data-structures/union-find")
+def build_and_query_union_find(request: UnionFindRequest) -> Dict:
+    """Builds a Union-Find over a set of elements and returns the resulting groups."""
+    return _call(
+        tools.build_and_query_union_find,
+        request.elements,
+        request.unions,
+        request.query,
+    )
 
 
 @app.post("/graphs/dijkstra")
