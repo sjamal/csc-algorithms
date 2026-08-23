@@ -24,6 +24,7 @@ from src.graphs.a_star import a_star
 from src.graphs.bellman_ford import bellman_ford
 from src.graphs.breadth_first_search import breadth_first_search
 from src.graphs.depth_first_search import depth_first_search
+from src.graphs.kruskal import Edge, kruskal
 from src.graphs.topological_sort import topological_sort
 from src.machine_learning.kmeans import KMeans
 from src.machine_learning.pca import PCA
@@ -185,6 +186,15 @@ def graph_breadth_first_search(graph: Dict[str, List[str]], source: str) -> Dict
 def graph_depth_first_search(graph: Dict[str, List[str]], source: str) -> Dict:
     """Traverses a graph depth first from `source` using an explicit stack."""
     return {"order": depth_first_search(graph, source)}
+
+
+def graph_kruskal(vertices: List[str], edges: List[List[object]]) -> Dict:
+    """Builds a minimum spanning tree from a weighted undirected edge list."""
+    typed_edges: List[Edge] = [
+        (first, second, weight) for first, second, weight in edges
+    ]
+    selected_edges, total_weight = kruskal(vertices, typed_edges)
+    return {"edges": [list(edge) for edge in selected_edges], "weight": total_weight}
 
 
 def compress_huffman_encode(text: str) -> Dict:

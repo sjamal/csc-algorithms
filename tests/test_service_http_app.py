@@ -203,6 +203,32 @@ def test_http_graph_traversal_invalid_source_returns_400():
     assert "Source key" in response.json()["detail"]
 
 
+def test_http_graph_kruskal():
+    """Verifies the Kruskal endpoint returns a minimum spanning tree."""
+    response = client.post(
+        "/graphs/kruskal",
+        json={
+            "vertices": ["A", "B", "C"],
+            "edges": [["A", "B", 1], ["B", "C", 2], ["A", "C", 4]],
+        },
+    )
+    assert response.status_code == 200
+    assert response.json() == {
+        "edges": [["A", "B", 1], ["B", "C", 2]],
+        "weight": 3,
+    }
+
+
+def test_http_graph_kruskal_disconnected_returns_400():
+    """Ensures a disconnected graph is surfaced as an HTTP 400 response."""
+    response = client.post(
+        "/graphs/kruskal",
+        json={"vertices": ["A", "B"], "edges": []},
+    )
+    assert response.status_code == 400
+    assert "disconnected" in response.json()["detail"]
+
+
 def test_http_huffman_round_trip():
     """Verifies the Huffman encode/decode endpoints recover the original text."""
     encode_response = client.post(

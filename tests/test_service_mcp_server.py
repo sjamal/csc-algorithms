@@ -32,6 +32,7 @@ def test_mcp_tool_registry_contains_all_algorithms():
         "graph_topological_sort",
         "graph_breadth_first_search",
         "graph_depth_first_search",
+        "graph_kruskal",
         "compress_huffman_encode",
         "compress_huffman_decode",
         "numeric_sieve_of_eratosthenes",
@@ -153,6 +154,15 @@ def test_mcp_graph_depth_first_search():
     graph = {"A": ["B", "C"], "B": ["D"], "C": ["E"], "D": [], "E": []}
     assert mcp_server.graph_depth_first_search(graph, "A") == {
         "order": ["A", "B", "D", "C", "E"]
+    }
+
+
+def test_mcp_graph_kruskal():
+    """Verifies the Kruskal tool returns a minimum spanning tree."""
+    edges = [["A", "B", 1], ["B", "C", 2], ["A", "C", 4]]
+    assert mcp_server.graph_kruskal(["A", "B", "C"], edges) == {
+        "edges": [["A", "B", 1], ["B", "C", 2]],
+        "weight": 3,
     }
 
 

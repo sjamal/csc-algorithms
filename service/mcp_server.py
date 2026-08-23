@@ -135,6 +135,12 @@ def graph_depth_first_search(graph: Dict[str, List[str]], source: str) -> Dict:
 
 
 @mcp.tool()
+def graph_kruskal(vertices: List[str], edges: List[List[object]]) -> Dict:
+    """Builds a minimum spanning tree from a weighted undirected edge list."""
+    return tools.graph_kruskal(vertices, edges)
+
+
+@mcp.tool()
 def compress_huffman_encode(text: str) -> Dict:
     """Compresses text into a bitstring using greedily-built variable-length codes."""
     return tools.compress_huffman_encode(text)
