@@ -38,6 +38,16 @@ This document serves as the long-term architectural roadmap for this learning re
 *   **Heap Sort**: In-place comparison sort built atop a binary max-heap, contrasting Quicksort/Merge Sort's partitioning and merging strategies. (Completed)
 *   **Euclidean Algorithm (GCD)**: Iterative remainder-based reduction resolving the greatest common divisor between two integers.
 *   **Valid Parentheses (Stack-Based Matching)**: Stack-tracked bracket balancing validating correctly nested and closed symbol pairs.
+*   **Binary Search**: Divide-and-conquer $O(\log n)$ lookup resolving a target's position within a sorted array. (Completed)
+
+### Phase 7: Graph Traversal & Minimum Spanning Trees
+*   **Breadth-First Search (BFS)**: Queue-driven level-order graph traversal resolving shortest unweighted paths and reachability.
+*   **Depth-First Search (DFS)**: Stack/recursion-driven graph traversal resolving connectivity, cycle detection, and ordering.
+*   **Kruskal's Algorithm**: Greedy edge-sorted minimum spanning tree construction built atop the existing Union-Find structure.
+
+### Phase 8: Numerical Methods & Ranking Algorithms
+*   **PageRank (Power Iteration)**: Iterative eigenvector approximation ranking nodes by weighted incoming link importance.
+*   **Fast Inverse Square Root**: Bit-level floating-point approximation technique accelerating $1/\sqrt{x}$ via a single Newton-Raphson refinement step.
 
 ---
 

@@ -20,6 +20,12 @@ def test_sort_heap_sort():
     assert tools.sort_heap_sort([5, 2, 4, 1, 3]) == [1, 2, 3, 4, 5]
 
 
+def test_search_binary_search():
+    """Verifies Binary Search wrapper returns the correct index, or -1 if absent."""
+    assert tools.search_binary_search([1, 3, 5, 7, 9], target=7) == {"index": 3}
+    assert tools.search_binary_search([1, 3, 5, 7, 9], target=4) == {"index": -1}
+
+
 def test_search_kmp():
     """Verifies KMP wrapper returns matching start indices."""
     assert tools.search_kmp("ababcababc", "abc") == [2, 7]
