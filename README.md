@@ -89,6 +89,7 @@ The architectural choices, trade-offs, and design patterns for each algorithm ar
 * [ADR 0012: Iterative Boolean Marking for Sieve of Eratosthenes](docs/adr/0012-use-iterative-boolean-marking-for-sieve-of-eratosthenes.md)
 * [ADR 0013: Union by Rank with Path Compression for Union-Find](docs/adr/0013-use-union-by-rank-with-path-compression-for-union-find.md)
 * [ADR 0014: Bottom-Up Divide-and-Conquer Merge for Merge Sort](docs/adr/0014-use-bottom-up-divide-and-conquer-merge-for-merge-sort.md)
+* [ADR 0015: Iterative Pointer Rewiring for Singly Linked List Reversal](docs/adr/0015-use-iterative-pointer-rewiring-for-singly-linked-list-reversal.md)
 
 ---
 
@@ -115,3 +116,4 @@ To ensure uniformity, this repository follows strict standards derived from **PE
 11. **Service Layer Input Validation:** The HTTP API validates request bodies via Pydantic schemas and translates algorithm-level `ValueError`s into HTTP 400 responses rather than leaking stack traces; both the MCP server and HTTP API are stateless per call, so no client-supplied data persists across requests.
 12. **Fixed Element Universe:** Union-Find validates every `find()`/`union()` call against its initial element set and raises a `ValueError` for unknown elements, preventing silent creation of untracked entries.
 13. **Worst-Case DoS Mitigation:** Merge Sort guarantees $O(n \log n)$ even on adversarial input, making it the safer default over Quicksort when sorting untrusted, attacker-influenced data where worst-case scaling matters.
+14. **Bounded Traversal Footprint:** The Singly Linked List's `search`/`delete`/`reverse` operations are strictly O(n) iterative walks with no recursion, preventing stack-depth exhaustion on very large untrusted input lists.

@@ -59,6 +59,20 @@ def test_build_and_query_union_find_without_query():
     assert result["groups"] == [["A", "B"]]
 
 
+def test_build_and_query_linked_list():
+    """Verifies Linked List wrapper builds, optionally reverses, and searches."""
+    result = tools.build_and_query_linked_list([1, 2, 3], search_for=2, reverse=True)
+    assert result["values"] == [3, 2, 1]
+    assert result["found"] is True
+
+
+def test_build_and_query_linked_list_without_search_or_reverse():
+    """Ensures default behavior omits 'found' and preserves insertion order."""
+    result = tools.build_and_query_linked_list([1, 2, 3])
+    assert result["values"] == [1, 2, 3]
+    assert "found" not in result
+
+
 def test_graph_dijkstra():
     """Verifies Dijkstra wrapper converts JSON edge lists and computes distances."""
     graph = {"A": [["B", 1]], "B": [["C", 2]], "C": []}

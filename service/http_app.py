@@ -47,6 +47,12 @@ class UnionFindRequest(BaseModel):
     query: Optional[List[str]] = None
 
 
+class LinkedListRequest(BaseModel):
+    values: List[int]
+    search_for: Optional[int] = None
+    reverse: bool = False
+
+
 class WeightedGraphRequest(BaseModel):
     graph: Dict[str, List[List[object]]]
     source: str
@@ -125,6 +131,17 @@ def build_and_query_union_find(request: UnionFindRequest) -> Dict:
         request.elements,
         request.unions,
         request.query,
+    )
+
+
+@app.post("/data-structures/linked-list")
+def build_and_query_linked_list(request: LinkedListRequest) -> Dict:
+    """Builds a Singly Linked List, optionally reversing it, and returns its layout."""
+    return _call(
+        tools.build_and_query_linked_list,
+        request.values,
+        request.search_for,
+        request.reverse,
     )
 
 
