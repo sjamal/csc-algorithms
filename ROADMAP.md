@@ -22,7 +22,7 @@ This document serves as the long-term architectural roadmap for this learning re
 *   **AVL or Red-Black Trees**: Self-adjusting trees that maintain a maximum $O(\log n)$ runtime depth across adversarial data sets. (Completed)
 *   **Huffman Coding**: Greedy tree construction designed to output optimal variable-length character prefix maps. (Completed)
 *   **Topological Sort (Kahn's Algorithm)**: In-degree tracked BFS ordering resolving dependency sequencing across directed acyclic graphs. (Completed)
-*   **Sieve of Eratosthenes**: Iterative marking sieve generating prime number sequences up to a defined boundary.
+*   **Sieve of Eratosthenes**: Iterative marking sieve generating prime number sequences up to a defined boundary. (Completed)
 
 ### Phase 4: Foundational Structures & Sorting Alternatives
 *   **Union-Find (Disjoint Set)**: Path-compressed, rank-unioned set tracking structure resolving connectivity queries in near-constant time.
