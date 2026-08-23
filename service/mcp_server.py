@@ -34,6 +34,12 @@ def sort_merge_sort(values: List[int]) -> List[int]:
 
 
 @mcp.tool()
+def sort_heap_sort(values: List[int]) -> List[int]:
+    """Sorts a list of integers in ascending order using Heap Sort."""
+    return tools.sort_heap_sort(values)
+
+
+@mcp.tool()
 def search_kmp(text: str, pattern: str) -> List[int]:
     """Finds every 0-indexed starting position of `pattern` within `text`."""
     return tools.search_kmp(text, pattern)
