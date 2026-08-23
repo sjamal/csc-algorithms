@@ -85,6 +85,16 @@ def test_http_dp_knapsack_01():
     assert response.json() == {"max_value": 9, "selected_indices": [1, 2]}
 
 
+def test_http_dp_longest_common_subsequence():
+    """Verifies the LCS endpoint returns the matched length and subsequence content."""
+    response = client.post(
+        "/dynamic-programming/lcs",
+        json={"first": "ABCBDAB", "second": "BDCABA"},
+    )
+    assert response.status_code == 200
+    assert response.json() == {"length": 4, "subsequence": "BCBA"}
+
+
 def test_http_graph_dijkstra():
     """Verifies the Dijkstra endpoint computes shortest path distances."""
     response = client.post(

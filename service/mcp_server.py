@@ -76,6 +76,12 @@ def dp_knapsack_01(weights: List[int], values: List[int], capacity: int) -> Dict
 
 
 @mcp.tool()
+def dp_longest_common_subsequence(first: str, second: str) -> Dict:
+    """Finds the length and content of the longest subsequence common to both strings."""
+    return tools.dp_longest_common_subsequence(first, second)
+
+
+@mcp.tool()
 def graph_dijkstra(graph: tools.WeightedGraph, source: str) -> Dict:
     """Computes single-source shortest paths using Dijkstra's algorithm."""
     return tools.graph_dijkstra(graph, source)

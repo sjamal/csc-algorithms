@@ -23,6 +23,7 @@ def test_mcp_tool_registry_contains_all_algorithms():
         "build_and_query_union_find",
         "build_and_query_linked_list",
         "dp_knapsack_01",
+        "dp_longest_common_subsequence",
         "graph_dijkstra",
         "graph_bellman_ford",
         "graph_a_star",
@@ -88,6 +89,12 @@ def test_mcp_dp_knapsack_01():
         weights=[1, 3, 4, 5], values=[1, 4, 5, 7], capacity=7
     )
     assert result == {"max_value": 9, "selected_indices": [1, 2]}
+
+
+def test_mcp_dp_longest_common_subsequence():
+    """Verifies the LCS tool returns the matched length and subsequence content."""
+    result = mcp_server.dp_longest_common_subsequence("ABCBDAB", "BDCABA")
+    assert result == {"length": 4, "subsequence": "BCBA"}
 
 
 def test_mcp_graph_dijkstra():
