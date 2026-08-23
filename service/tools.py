@@ -19,6 +19,7 @@ from src.data_structures.dijkstra import dijkstra
 from src.data_structures.linked_list import SinglyLinkedList
 from src.data_structures.union_find import UnionFind
 from src.dynamic_programming.knapsack import knapsack_01
+from src.dynamic_programming.lcs import longest_common_subsequence
 from src.graphs.a_star import a_star
 from src.graphs.bellman_ford import bellman_ford
 from src.graphs.topological_sort import topological_sort
@@ -125,6 +126,12 @@ def dp_knapsack_01(weights: List[int], values: List[int], capacity: int) -> Dict
     """Selects a subset of items maximizing total value within a fixed weight capacity."""
     max_value, selected_indices = knapsack_01(weights, values, capacity)
     return {"max_value": max_value, "selected_indices": selected_indices}
+
+
+def dp_longest_common_subsequence(first: str, second: str) -> Dict:
+    """Finds the length and content of the longest subsequence common to both strings."""
+    length, subsequence = longest_common_subsequence(first, second)
+    return {"length": length, "subsequence": subsequence}
 
 
 def graph_dijkstra(graph: WeightedGraph, source: str) -> Dict:
