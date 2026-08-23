@@ -96,6 +96,13 @@ The architectural choices, trade-offs, and design patterns for each algorithm ar
 * [ADR 0019: Iterative Midpoint Bisection for Binary Search](docs/adr/0019-use-iterative-midpoint-bisection-for-binary-search.md)
 * [ADR 0020: Iterative Queue and Stack for BFS and DFS](docs/adr/0020-use-iterative-queue-and-stack-for-bfs-dfs.md)
 * [ADR 0021: Edge-Sorted Union-Find for Kruskal's Algorithm](docs/adr/0021-use-edge-sorted-union-find-for-kruskal.md)
+* [ADR 0022: Character-Branching Trie for Prefix Lookups](docs/adr/0022-use-character-branching-trie-for-prefix-lookups.md)
+* [ADR 0023: Iterative Euclidean GCD](docs/adr/0023-use-iterative-euclidean-gcd.md)
+* [ADR 0024: Stack for Valid Parentheses](docs/adr/0024-use-stack-for-valid-parentheses.md)
+
+## Algorithm Catalog
+
+Browse the [algorithm catalog](docs/algorithms.md) for concise definitions, complexity notes, implementation links, tests, and guidance on choosing an algorithm or data structure.
 
 ---
 

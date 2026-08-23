@@ -24,6 +24,7 @@ def test_mcp_tool_registry_contains_all_algorithms():
         "build_and_query_avl_tree",
         "build_and_query_union_find",
         "build_and_query_linked_list",
+        "build_and_query_trie",
         "dp_knapsack_01",
         "dp_longest_common_subsequence",
         "graph_dijkstra",
@@ -36,6 +37,8 @@ def test_mcp_tool_registry_contains_all_algorithms():
         "compress_huffman_encode",
         "compress_huffman_decode",
         "numeric_sieve_of_eratosthenes",
+        "numeric_greatest_common_divisor",
+        "validate_parentheses",
         "ml_kmeans_cluster",
         "ml_pca_project",
     }
@@ -97,6 +100,17 @@ def test_mcp_build_and_query_linked_list():
         [1, 2, 3], search_for=2, reverse=True
     )
     assert result == {"values": [3, 2, 1], "found": True}
+
+
+def test_mcp_build_and_query_trie():
+    """Verifies the Trie tool returns exact and prefix query results."""
+    assert mcp_server.build_and_query_trie(
+        ["cat", "car"], search_for="cat", prefix="ca"
+    ) == {
+        "found": True,
+        "starts_with": True,
+        "suggestions": ["car", "cat"],
+    }
 
 
 def test_mcp_dp_knapsack_01():
@@ -178,6 +192,16 @@ def test_mcp_compress_huffman_round_trip():
 def test_mcp_numeric_sieve_of_eratosthenes():
     """Verifies the sieve tool returns primes up to the given limit."""
     assert mcp_server.numeric_sieve_of_eratosthenes(10) == {"primes": [2, 3, 5, 7]}
+
+
+def test_mcp_numeric_greatest_common_divisor():
+    """Verifies the GCD tool returns the Euclidean result."""
+    assert mcp_server.numeric_greatest_common_divisor(-24, 18) == {"gcd": 6}
+
+
+def test_mcp_validate_parentheses():
+    """Verifies the parentheses tool returns bracket validity."""
+    assert mcp_server.validate_parentheses("([)]") == {"valid": False}
 
 
 def test_mcp_ml_kmeans_cluster():

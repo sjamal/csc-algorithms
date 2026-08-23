@@ -157,6 +157,17 @@ def test_graph_kruskal():
     }
 
 
+def test_build_and_query_trie():
+    """Verifies Trie wrapper returns exact and prefix query results."""
+    assert tools.build_and_query_trie(
+        ["cat", "car", "dog"], search_for="cat", prefix="ca"
+    ) == {
+        "found": True,
+        "starts_with": True,
+        "suggestions": ["car", "cat"],
+    }
+
+
 def test_compress_huffman_round_trip():
     """Verifies Huffman encode/decode wrappers recover the original text."""
     encoded = tools.compress_huffman_encode("abracadabra")
@@ -169,6 +180,17 @@ def test_compress_huffman_round_trip():
 def test_numeric_sieve_of_eratosthenes():
     """Verifies the sieve wrapper returns primes up to the given limit."""
     assert tools.numeric_sieve_of_eratosthenes(10) == {"primes": [2, 3, 5, 7]}
+
+
+def test_numeric_greatest_common_divisor():
+    """Verifies GCD wrapper returns the Euclidean result."""
+    assert tools.numeric_greatest_common_divisor(-24, 18) == {"gcd": 6}
+
+
+def test_validate_parentheses():
+    """Verifies parentheses wrapper returns bracket validity."""
+    assert tools.validate_parentheses("f(a[0])") == {"valid": True}
+    assert tools.validate_parentheses("([)]") == {"valid": False}
 
 
 def test_ml_kmeans_cluster():

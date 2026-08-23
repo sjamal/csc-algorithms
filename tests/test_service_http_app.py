@@ -229,6 +229,36 @@ def test_http_graph_kruskal_disconnected_returns_400():
     assert "disconnected" in response.json()["detail"]
 
 
+def test_http_build_and_query_trie():
+    """Verifies the Trie endpoint returns exact and prefix query results."""
+    response = client.post(
+        "/data-structures/trie",
+        json={"words": ["cat", "car"], "search_for": "cat", "prefix": "ca"},
+    )
+    assert response.status_code == 200
+    assert response.json() == {
+        "found": True,
+        "starts_with": True,
+        "suggestions": ["car", "cat"],
+    }
+
+
+def test_http_numeric_greatest_common_divisor():
+    """Verifies the GCD endpoint returns the Euclidean result."""
+    response = client.post(
+        "/numeric/greatest-common-divisor", json={"first": -24, "second": 18}
+    )
+    assert response.status_code == 200
+    assert response.json() == {"gcd": 6}
+
+
+def test_http_validate_parentheses():
+    """Verifies the parentheses endpoint returns bracket validity."""
+    response = client.post("/data-structures/valid-parentheses", json={"text": "([)]"})
+    assert response.status_code == 200
+    assert response.json() == {"valid": False}
+
+
 def test_http_huffman_round_trip():
     """Verifies the Huffman encode/decode endpoints recover the original text."""
     encode_response = client.post(

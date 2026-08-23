@@ -1,6 +1,7 @@
 """Comprehensive evaluation suite tracking Sieve of Eratosthenes prime generation."""
 
 from src.numeric.sieve import sieve_of_eratosthenes
+from src.numeric.gcd import greatest_common_divisor
 
 
 def test_sieve_typical_boundary():
@@ -23,3 +24,11 @@ def test_sieve_small_boundaries():
 def test_sieve_rejects_negative_boundary():
     """Ensures negative or otherwise undersized boundary inputs return safely."""
     assert sieve_of_eratosthenes(-10) == []
+
+
+def test_greatest_common_divisor():
+    """Verifies Euclid's algorithm handles positive, negative, and zero inputs."""
+    assert greatest_common_divisor(48, 18) == 6
+    assert greatest_common_divisor(-24, 18) == 6
+    assert greatest_common_divisor(0, 9) == 9
+    assert greatest_common_divisor(0, 0) == 0
