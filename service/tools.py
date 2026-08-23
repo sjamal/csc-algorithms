@@ -16,6 +16,7 @@ from src.compression.huffman import encode as _huffman_encode
 from src.data_structures.avl_tree import AVLTree
 from src.data_structures.bst import BinarySearchTree
 from src.data_structures.dijkstra import dijkstra
+from src.data_structures.linked_list import SinglyLinkedList
 from src.data_structures.union_find import UnionFind
 from src.graphs.a_star import a_star
 from src.graphs.bellman_ford import bellman_ford
@@ -99,6 +100,23 @@ def build_and_query_union_find(
     result: Dict = {"groups": sorted((sorted(members) for members in groups.values()))}
     if query is not None:
         result["connected"] = uf.connected(query[0], query[1])
+    return result
+
+
+def build_and_query_linked_list(
+    values: List[int], search_for: Optional[int] = None, reverse: bool = False
+) -> Dict:
+    """Builds a Singly Linked List from `values`, optionally reversing it and searching."""
+    linked_list = SinglyLinkedList()
+    for value in values:
+        linked_list.append(value)
+
+    if reverse:
+        linked_list.reverse()
+
+    result: Dict = {"values": linked_list.to_list()}
+    if search_for is not None:
+        result["found"] = linked_list.search(search_for)
     return result
 
 

@@ -62,6 +62,14 @@ def build_and_query_union_find(
 
 
 @mcp.tool()
+def build_and_query_linked_list(
+    values: List[int], search_for: Optional[int] = None, reverse: bool = False
+) -> Dict:
+    """Builds a Singly Linked List from `values`, optionally reversing it and searching."""
+    return tools.build_and_query_linked_list(values, search_for, reverse)
+
+
+@mcp.tool()
 def graph_dijkstra(graph: tools.WeightedGraph, source: str) -> Dict:
     """Computes single-source shortest paths using Dijkstra's algorithm."""
     return tools.graph_dijkstra(graph, source)
