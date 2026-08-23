@@ -1,8 +1,9 @@
-"""Comprehensive evaluation suite tracking Bellman-Ford and A* routing operations."""
+"""Comprehensive evaluation suite tracking Bellman-Ford, A*, and Topological Sort operations."""
 
 import pytest
 from src.graphs.bellman_ford import bellman_ford
 from src.graphs.a_star import a_star
+from src.graphs.topological_sort import topological_sort
 
 
 @pytest.fixture
@@ -109,3 +110,31 @@ def test_a_star_security_vulnerabilities(mock_spatial_graph):
 
     with pytest.raises(ValueError, match="missing spatial coordinates"):
         a_star(graph, {"A": (0, 0)}, "A", "D")
+
+
+def test_topological_sort_dependency_order():
+    """Verifies nodes are ordered such that every edge points forward in the sequence."""
+    graph = {"A": ["C"], "B": ["C"], "C": ["D"], "D": []}
+
+    assert topological_sort(graph) == ["A", "B", "C", "D"]
+
+
+def test_topological_sort_empty_graph():
+    """Ensures an empty graph resolves to an empty order without error."""
+    assert topological_sort({}) == []
+
+
+def test_topological_sort_cycle_detection():
+    """Ensures a cyclical graph raises a ValueError instead of returning a partial order."""
+    cyclical_graph = {"A": ["B"], "B": ["C"], "C": ["A"]}
+
+    with pytest.raises(ValueError, match="Graph contains a cycle"):
+        topological_sort(cyclical_graph)
+
+
+def test_topological_sort_undeclared_node_reference():
+    """Ensures an edge pointing to an undeclared node raises a ValueError safely."""
+    malformed_graph = {"A": ["Z"]}
+
+    with pytest.raises(ValueError, match="undeclared node"):
+        topological_sort(malformed_graph)
