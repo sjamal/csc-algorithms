@@ -70,6 +70,12 @@ def build_and_query_linked_list(
 
 
 @mcp.tool()
+def dp_knapsack_01(weights: List[int], values: List[int], capacity: int) -> Dict:
+    """Selects a subset of items maximizing total value within a fixed weight capacity."""
+    return tools.dp_knapsack_01(weights, values, capacity)
+
+
+@mcp.tool()
 def graph_dijkstra(graph: tools.WeightedGraph, source: str) -> Dict:
     """Computes single-source shortest paths using Dijkstra's algorithm."""
     return tools.graph_dijkstra(graph, source)

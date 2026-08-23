@@ -73,6 +73,12 @@ def test_build_and_query_linked_list_without_search_or_reverse():
     assert "found" not in result
 
 
+def test_dp_knapsack_01():
+    """Verifies Knapsack wrapper returns the optimal value and selected item indices."""
+    result = tools.dp_knapsack_01(weights=[1, 3, 4, 5], values=[1, 4, 5, 7], capacity=7)
+    assert result == {"max_value": 9, "selected_indices": [1, 2]}
+
+
 def test_graph_dijkstra():
     """Verifies Dijkstra wrapper converts JSON edge lists and computes distances."""
     graph = {"A": [["B", 1]], "B": [["C", 2]], "C": []}
