@@ -33,10 +33,24 @@ This document serves as the long-term architectural roadmap for this learning re
 *   **0/1 Knapsack Problem**: Tabular matrix memoization framework designed to resolve finite profit boundaries. (Completed)
 *   **Longest Common Subsequence (LCS)**: Relational alignment mapping tracking matching sub-segments within strings. (Completed)
 
+### Phase 6: Foundational Primitives & Auxiliary Structures
+*   **Trie (Prefix Tree)**: Character-branching tree structure resolving prefix-based word lookups and autocomplete-style queries.
+*   **Heap Sort**: In-place comparison sort built atop a binary max-heap, contrasting Quicksort/Merge Sort's partitioning and merging strategies.
+*   **Euclidean Algorithm (GCD)**: Iterative remainder-based reduction resolving the greatest common divisor between two integers.
+*   **Valid Parentheses (Stack-Based Matching)**: Stack-tracked bracket balancing validating correctly nested and closed symbol pairs.
+
 ---
 
 ## 🔌 Cross-Cutting: Interoperability
 *   **MCP Server & HTTP API**: Transport-agnostic `service/` layer exposing every implemented algorithm as a stateless MCP tool (stdio) and a REST endpoint (FastAPI), for consumption by agents, chat clients, and other programmatic callers. (Completed)
+
+---
+
+## 🧭 Potential Future Directions (Unscheduled)
+Ideas under consideration for later inclusion, not yet assigned to a phase:
+*   **CLI**: A command-line interface fronting the `service/tools.py` layer for terminal-based invocation of any algorithm.
+*   **Advanced Service Authentication**: API key/OAuth-based access control for the HTTP API beyond its current open, stateless design.
+*   **Packaging & Distribution**: Publishing this repository as an installable package (e.g., to PyPI) for reuse outside this workspace.
 
 ---
 
