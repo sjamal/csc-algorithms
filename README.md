@@ -88,6 +88,7 @@ The architectural choices, trade-offs, and design patterns for each algorithm ar
 * [ADR 0011: Kahn's In-Degree BFS for Topological Sort](docs/adr/0011-use-kahns-in-degree-bfs-for-topological-sort.md)
 * [ADR 0012: Iterative Boolean Marking for Sieve of Eratosthenes](docs/adr/0012-use-iterative-boolean-marking-for-sieve-of-eratosthenes.md)
 * [ADR 0013: Union by Rank with Path Compression for Union-Find](docs/adr/0013-use-union-by-rank-with-path-compression-for-union-find.md)
+* [ADR 0014: Bottom-Up Divide-and-Conquer Merge for Merge Sort](docs/adr/0014-use-bottom-up-divide-and-conquer-merge-for-merge-sort.md)
 
 ---
 
@@ -113,3 +114,4 @@ To ensure uniformity, this repository follows strict standards derived from **PE
 10. **Bounded Memory Allocation:** The Sieve of Eratosthenes allocates its boolean tracking array based on the caller-supplied boundary; callers should validate untrusted boundary inputs against a sane upper limit before use to avoid excessive memory allocation.
 11. **Service Layer Input Validation:** The HTTP API validates request bodies via Pydantic schemas and translates algorithm-level `ValueError`s into HTTP 400 responses rather than leaking stack traces; both the MCP server and HTTP API are stateless per call, so no client-supplied data persists across requests.
 12. **Fixed Element Universe:** Union-Find validates every `find()`/`union()` call against its initial element set and raises a `ValueError` for unknown elements, preventing silent creation of untracked entries.
+13. **Worst-Case DoS Mitigation:** Merge Sort guarantees $O(n \log n)$ even on adversarial input, making it the safer default over Quicksort when sorting untrusted, attacker-influenced data where worst-case scaling matters.

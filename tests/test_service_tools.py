@@ -10,6 +10,11 @@ def test_sort_quicksort():
     assert tools.sort_quicksort([5, 2, 4, 1, 3]) == [1, 2, 3, 4, 5]
 
 
+def test_sort_merge_sort():
+    """Verifies Merge Sort wrapper returns an ascending-order list."""
+    assert tools.sort_merge_sort([5, 2, 4, 1, 3]) == [1, 2, 3, 4, 5]
+
+
 def test_search_kmp():
     """Verifies KMP wrapper returns matching start indices."""
     assert tools.search_kmp("ababcababc", "abc") == [2, 7]
