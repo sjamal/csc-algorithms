@@ -64,6 +64,7 @@ The architectural choices, trade-offs, and design patterns for each algorithm ar
 * [ADR 0009: AVL Rotations for Self-Balancing BST](docs/adr/0009-use-avl-rotations-for-self-balancing-bst.md)
 * [ADR 0010: Min-Heap Greedy Merge for Huffman Coding](docs/adr/0010-use-min-heap-greedy-merge-for-huffman-coding.md)
 * [ADR 0011: Kahn's In-Degree BFS for Topological Sort](docs/adr/0011-use-kahns-in-degree-bfs-for-topological-sort.md)
+* [ADR 0012: Iterative Boolean Marking for Sieve of Eratosthenes](docs/adr/0012-use-iterative-boolean-marking-for-sieve-of-eratosthenes.md)
 
 ---
 
@@ -86,5 +87,5 @@ To ensure uniformity, this repository follows strict standards derived from **PE
 7. **Balanced Depth Guarantee:** The AVL Tree rebalances on every insert and delete, preventing adversarial sorted-input sequences from degrading traversal operations to linear time.
 8. **Codebook Integrity Validation:** The Huffman decoder rejects malformed or duplicate-code codebooks and dangling/invalid bitstreams with an explicit `ValueError`, rather than silently returning corrupted or truncated text.
 9. **Cycle & Referential Integrity Guards:** Topological Sort validates that every edge references a declared node and raises a `ValueError` when a cycle prevents a complete ordering, rather than silently returning a partial or misleading sequence.
-
+10. **Bounded Memory Allocation:** The Sieve of Eratosthenes allocates its boolean tracking array based on the caller-supplied boundary; callers should validate untrusted boundary inputs against a sane upper limit before use to avoid excessive memory allocation.
 
