@@ -5,6 +5,7 @@ from src.graphs.bellman_ford import bellman_ford
 from src.graphs.a_star import a_star
 from src.graphs.breadth_first_search import breadth_first_search
 from src.graphs.depth_first_search import depth_first_search
+from src.graphs.kruskal import kruskal
 from src.graphs.topological_sort import topological_sort
 
 
@@ -190,3 +191,42 @@ def test_graph_traversals_validate_source_and_edges(traversal):
 def test_graph_traversals_handle_empty_source_component(traversal):
     """Ensures both traversals return the source when it has no outgoing edges."""
     assert traversal({"A": [], "B": []}, "A") == ["A"]
+
+
+def test_kruskal_builds_minimum_spanning_tree():
+    """Verifies Kruskal selects the lightest acyclic edges and totals their weight."""
+    edges = [
+        ("A", "B", 1),
+        ("B", "C", 2),
+        ("A", "C", 4),
+        ("C", "D", 1),
+        ("B", "D", 5),
+    ]
+
+    assert kruskal(["A", "B", "C", "D"], edges) == (
+        [("A", "B", 1), ("C", "D", 1), ("B", "C", 2)],
+        4,
+    )
+
+
+def test_kruskal_supports_negative_weights_and_single_vertex():
+    """Ensures negative weights are valid and a singleton graph has an empty tree."""
+    assert kruskal(["A", "B"], [("A", "B", -2)]) == ([("A", "B", -2)], -2)
+    assert kruskal(["A"], []) == ([], 0)
+
+
+@pytest.mark.parametrize(
+    "vertices, edges, message",
+    [
+        ([], [], "at least one vertex"),
+        (["A", "A"], [], "unique"),
+        (["A", "B"], [("A", "B")], "two vertices and a weight"),
+        (["A", "B"], [("A", "C", 1)], "undeclared vertex"),
+        (["A", "B"], [("A", "B", "heavy")], "numeric"),
+        (["A", "B"], [], "disconnected"),
+    ],
+)
+def test_kruskal_validates_graph_input(vertices, edges, message):
+    """Ensures malformed and disconnected graph inputs raise clear ValueErrors."""
+    with pytest.raises(ValueError, match=message):
+        kruskal(vertices, edges)

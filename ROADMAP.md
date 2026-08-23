@@ -43,7 +43,7 @@ This document serves as the long-term architectural roadmap for this learning re
 ### Phase 7: Graph Traversal & Minimum Spanning Trees
 *   **Breadth-First Search (BFS)**: Queue-driven level-order graph traversal resolving shortest unweighted paths and reachability. (Completed)
 *   **Depth-First Search (DFS)**: Stack/recursion-driven graph traversal resolving connectivity, cycle detection, and ordering. (Completed)
-*   **Kruskal's Algorithm**: Greedy edge-sorted minimum spanning tree construction built atop the existing Union-Find structure.
+*   **Kruskal's Algorithm**: Greedy edge-sorted minimum spanning tree construction built atop the existing Union-Find structure. (Completed)
 
 ### Phase 8: Numerical Methods & Ranking Algorithms
 *   **PageRank (Power Iteration)**: Iterative eigenvector approximation ranking nodes by weighted incoming link importance.

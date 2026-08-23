@@ -90,6 +90,11 @@ class GraphTraversalRequest(BaseModel):
     source: str
 
 
+class KruskalRequest(BaseModel):
+    vertices: List[str]
+    edges: List[List[object]]
+
+
 class HuffmanEncodeRequest(BaseModel):
     text: str
 
@@ -232,6 +237,12 @@ def graph_breadth_first_search(request: GraphTraversalRequest) -> Dict:
 def graph_depth_first_search(request: GraphTraversalRequest) -> Dict:
     """Traverses a graph depth first from `source` using an explicit stack."""
     return _call(tools.graph_depth_first_search, request.graph, request.source)
+
+
+@app.post("/graphs/kruskal")
+def graph_kruskal(request: KruskalRequest) -> Dict:
+    """Builds a minimum spanning tree from a weighted undirected edge list."""
+    return _call(tools.graph_kruskal, request.vertices, request.edges)
 
 
 @app.post("/compression/huffman/encode")

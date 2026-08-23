@@ -148,6 +148,15 @@ def test_graph_depth_first_search():
     }
 
 
+def test_graph_kruskal():
+    """Verifies Kruskal wrapper returns JSON-friendly tree edges and total weight."""
+    edges = [["A", "B", 1], ["B", "C", 2], ["A", "C", 4]]
+    assert tools.graph_kruskal(["A", "B", "C"], edges) == {
+        "edges": [["A", "B", 1], ["B", "C", 2]],
+        "weight": 3,
+    }
+
+
 def test_compress_huffman_round_trip():
     """Verifies Huffman encode/decode wrappers recover the original text."""
     encoded = tools.compress_huffman_encode("abracadabra")
