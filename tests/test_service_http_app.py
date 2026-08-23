@@ -65,6 +65,16 @@ def test_http_build_and_query_union_find():
     assert response.json() == {"groups": [["A", "B"], ["C"]], "connected": False}
 
 
+def test_http_build_and_query_linked_list():
+    """Verifies the Linked List endpoint builds, optionally reverses, and searches."""
+    response = client.post(
+        "/data-structures/linked-list",
+        json={"values": [1, 2, 3], "search_for": 2, "reverse": True},
+    )
+    assert response.status_code == 200
+    assert response.json() == {"values": [3, 2, 1], "found": True}
+
+
 def test_http_graph_dijkstra():
     """Verifies the Dijkstra endpoint computes shortest path distances."""
     response = client.post(

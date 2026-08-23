@@ -21,6 +21,7 @@ def test_mcp_tool_registry_contains_all_algorithms():
         "build_and_query_bst",
         "build_and_query_avl_tree",
         "build_and_query_union_find",
+        "build_and_query_linked_list",
         "graph_dijkstra",
         "graph_bellman_ford",
         "graph_a_star",
@@ -70,6 +71,14 @@ def test_mcp_build_and_query_union_find():
         query=["A", "C"],
     )
     assert result == {"groups": [["A", "B"], ["C"]], "connected": False}
+
+
+def test_mcp_build_and_query_linked_list():
+    """Verifies the Linked List tool builds, optionally reverses, and searches."""
+    result = mcp_server.build_and_query_linked_list(
+        [1, 2, 3], search_for=2, reverse=True
+    )
+    assert result == {"values": [3, 2, 1], "found": True}
 
 
 def test_mcp_graph_dijkstra():

@@ -1,10 +1,11 @@
-"""Comprehensive evaluation suite tracking Dijkstra, BST, AVL Tree, and Union-Find operations."""
+"""Comprehensive evaluation suite tracking Dijkstra, BST, AVL Tree, Union-Find, and Linked List operations."""
 
 import pytest
 from src.data_structures.dijkstra import dijkstra
 from src.data_structures.bst import BinarySearchTree
 from src.data_structures.avl_tree import AVLTree
 from src.data_structures.union_find import UnionFind
+from src.data_structures.linked_list import SinglyLinkedList
 
 
 @pytest.fixture
@@ -211,3 +212,93 @@ def test_union_find_attaches_lower_rank_tree_under_higher_rank_root():
     uf.union("C", "A")
 
     assert uf.find("C") == "A"
+
+
+def test_linked_list_append_and_prepend():
+    """Verifies append/prepend build the expected head-to-tail ordering."""
+    linked_list = SinglyLinkedList()
+    linked_list.append(2)
+    linked_list.append(3)
+    linked_list.prepend(1)
+
+    assert linked_list.to_list() == [1, 2, 3]
+    assert len(linked_list) == 3
+    assert linked_list.head.value == 1
+    assert linked_list.tail.value == 3
+
+
+def test_linked_list_prepend_on_empty_list_sets_tail():
+    """Ensures prepending into an empty list also initializes the tail pointer."""
+    linked_list = SinglyLinkedList()
+    linked_list.prepend(1)
+
+    assert linked_list.head.value == 1
+    assert linked_list.tail.value == 1
+
+
+def test_linked_list_search():
+    """Verifies search correctly reports present and absent values."""
+    linked_list = SinglyLinkedList()
+    for value in [10, 20, 30]:
+        linked_list.append(value)
+
+    assert linked_list.search(20) is True
+    assert linked_list.search(99) is False
+
+
+def test_linked_list_delete_head_middle_and_tail():
+    """Verifies deletion correctly rewires pointers regardless of node position."""
+    linked_list = SinglyLinkedList()
+    for value in [1, 2, 3, 4]:
+        linked_list.append(value)
+
+    # Delete from the middle
+    assert linked_list.delete(2) is True
+    assert linked_list.to_list() == [1, 3, 4]
+
+    # Delete the head
+    assert linked_list.delete(1) is True
+    assert linked_list.to_list() == [3, 4]
+    assert linked_list.head.value == 3
+
+    # Delete the tail, confirming the tail pointer is fixed up
+    assert linked_list.delete(4) is True
+    assert linked_list.to_list() == [3]
+    assert linked_list.tail.value == 3
+
+    # Deleting a non-existent value is a safe no-op
+    assert linked_list.delete(999) is False
+
+
+def test_linked_list_delete_only_node_empties_the_list():
+    """Ensures deleting the sole remaining node resets head and tail to None."""
+    linked_list = SinglyLinkedList()
+    linked_list.append(1)
+
+    assert linked_list.delete(1) is True
+    assert linked_list.head is None
+    assert linked_list.tail is None
+    assert len(linked_list) == 0
+
+
+def test_linked_list_reverse():
+    """Verifies in-place reversal flips both traversal order and the tail pointer."""
+    linked_list = SinglyLinkedList()
+    for value in [1, 2, 3, 4]:
+        linked_list.append(value)
+
+    linked_list.reverse()
+
+    assert linked_list.to_list() == [4, 3, 2, 1]
+    assert linked_list.head.value == 4
+    assert linked_list.tail.value == 1
+
+
+def test_linked_list_reverse_empty_list_is_a_no_op():
+    """Ensures reversing an empty list does not raise and leaves it empty."""
+    linked_list = SinglyLinkedList()
+    linked_list.reverse()
+
+    assert linked_list.to_list() == []
+    assert linked_list.head is None
+    assert linked_list.tail is None
