@@ -31,7 +31,7 @@ This document serves as the long-term architectural roadmap for this learning re
 
 ### Phase 5: Dynamic Programming & Sequence Analysis
 *   **0/1 Knapsack Problem**: Tabular matrix memoization framework designed to resolve finite profit boundaries. (Completed)
-*   **Longest Common Subsequence (LCS)**: Relational alignment mapping tracking matching sub-segments within strings.
+*   **Longest Common Subsequence (LCS)**: Relational alignment mapping tracking matching sub-segments within strings. (Completed)
 
 ---
 

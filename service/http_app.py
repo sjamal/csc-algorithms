@@ -59,6 +59,11 @@ class KnapsackRequest(BaseModel):
     capacity: int
 
 
+class LcsRequest(BaseModel):
+    first: str
+    second: str
+
+
 class WeightedGraphRequest(BaseModel):
     graph: Dict[str, List[List[object]]]
     source: str
@@ -157,6 +162,12 @@ def dp_knapsack_01(request: KnapsackRequest) -> Dict:
     return _call(
         tools.dp_knapsack_01, request.weights, request.values, request.capacity
     )
+
+
+@app.post("/dynamic-programming/lcs")
+def dp_longest_common_subsequence(request: LcsRequest) -> Dict:
+    """Finds the length and content of the longest subsequence common to both strings."""
+    return _call(tools.dp_longest_common_subsequence, request.first, request.second)
 
 
 @app.post("/graphs/dijkstra")

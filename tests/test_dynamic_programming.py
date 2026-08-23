@@ -1,7 +1,8 @@
-"""Comprehensive evaluation suite tracking 0/1 Knapsack Problem resolution."""
+"""Comprehensive evaluation suite tracking 0/1 Knapsack and LCS resolution."""
 
 import pytest
 from src.dynamic_programming.knapsack import knapsack_01
+from src.dynamic_programming.lcs import longest_common_subsequence
 
 
 def test_knapsack_typical_selection():
@@ -54,3 +55,34 @@ def test_knapsack_rejects_negative_inputs():
 
     with pytest.raises(ValueError, match="non-negative"):
         knapsack_01([1], [-10], capacity=5)
+
+
+def test_lcs_typical_match():
+    """Verifies the length and content of a classic textbook LCS scenario."""
+    length, subsequence = longest_common_subsequence("ABCBDAB", "BDCABA")
+
+    assert length == 4
+    assert subsequence == "BCBA"
+
+
+def test_lcs_identical_strings():
+    """Ensures identical strings resolve to the full string as their own LCS."""
+    length, subsequence = longest_common_subsequence("hello", "hello")
+
+    assert length == 5
+    assert subsequence == "hello"
+
+
+def test_lcs_no_common_characters():
+    """Ensures completely disjoint character sets yield an empty subsequence."""
+    length, subsequence = longest_common_subsequence("abc", "xyz")
+
+    assert length == 0
+    assert subsequence == ""
+
+
+def test_lcs_empty_strings():
+    """Ensures one or both empty strings resolve to an empty subsequence safely."""
+    assert longest_common_subsequence("", "") == (0, "")
+    assert longest_common_subsequence("abc", "") == (0, "")
+    assert longest_common_subsequence("", "abc") == (0, "")

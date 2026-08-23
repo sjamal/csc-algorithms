@@ -79,6 +79,12 @@ def test_dp_knapsack_01():
     assert result == {"max_value": 9, "selected_indices": [1, 2]}
 
 
+def test_dp_longest_common_subsequence():
+    """Verifies LCS wrapper returns the matched length and subsequence content."""
+    result = tools.dp_longest_common_subsequence("ABCBDAB", "BDCABA")
+    assert result == {"length": 4, "subsequence": "BCBA"}
+
+
 def test_graph_dijkstra():
     """Verifies Dijkstra wrapper converts JSON edge lists and computes distances."""
     graph = {"A": [["B", 1]], "B": [["C", 2]], "C": []}
