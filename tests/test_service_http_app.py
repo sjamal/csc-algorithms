@@ -167,6 +167,42 @@ def test_http_graph_topological_sort():
     assert response.json() == {"order": ["A", "B", "C"]}
 
 
+def test_http_graph_breadth_first_search():
+    """Verifies the BFS endpoint returns level-order traversal output."""
+    response = client.post(
+        "/graphs/breadth-first-search",
+        json={
+            "graph": {"A": ["B", "C"], "B": ["D"], "C": ["E"], "D": [], "E": []},
+            "source": "A",
+        },
+    )
+    assert response.status_code == 200
+    assert response.json() == {"order": ["A", "B", "C", "D", "E"]}
+
+
+def test_http_graph_depth_first_search():
+    """Verifies the DFS endpoint returns deterministic preorder traversal output."""
+    response = client.post(
+        "/graphs/depth-first-search",
+        json={
+            "graph": {"A": ["B", "C"], "B": ["D"], "C": ["E"], "D": [], "E": []},
+            "source": "A",
+        },
+    )
+    assert response.status_code == 200
+    assert response.json() == {"order": ["A", "B", "D", "C", "E"]}
+
+
+def test_http_graph_traversal_invalid_source_returns_400():
+    """Ensures traversal input errors are translated into HTTP 400 responses."""
+    response = client.post(
+        "/graphs/breadth-first-search",
+        json={"graph": {"A": []}, "source": "Z"},
+    )
+    assert response.status_code == 400
+    assert "Source key" in response.json()["detail"]
+
+
 def test_http_huffman_round_trip():
     """Verifies the Huffman encode/decode endpoints recover the original text."""
     encode_response = client.post(

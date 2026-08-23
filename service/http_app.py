@@ -85,6 +85,11 @@ class TopologicalSortRequest(BaseModel):
     graph: Dict[str, List[str]]
 
 
+class GraphTraversalRequest(BaseModel):
+    graph: Dict[str, List[str]]
+    source: str
+
+
 class HuffmanEncodeRequest(BaseModel):
     text: str
 
@@ -215,6 +220,18 @@ def graph_a_star(request: AStarRequest) -> Dict:
 def graph_topological_sort(request: TopologicalSortRequest) -> Dict:
     """Orders nodes such that every directed edge points from earlier to later."""
     return _call(tools.graph_topological_sort, request.graph)
+
+
+@app.post("/graphs/breadth-first-search")
+def graph_breadth_first_search(request: GraphTraversalRequest) -> Dict:
+    """Traverses a graph level by level from `source` using BFS."""
+    return _call(tools.graph_breadth_first_search, request.graph, request.source)
+
+
+@app.post("/graphs/depth-first-search")
+def graph_depth_first_search(request: GraphTraversalRequest) -> Dict:
+    """Traverses a graph depth first from `source` using an explicit stack."""
+    return _call(tools.graph_depth_first_search, request.graph, request.source)
 
 
 @app.post("/compression/huffman/encode")

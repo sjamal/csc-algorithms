@@ -30,6 +30,8 @@ def test_mcp_tool_registry_contains_all_algorithms():
         "graph_bellman_ford",
         "graph_a_star",
         "graph_topological_sort",
+        "graph_breadth_first_search",
+        "graph_depth_first_search",
         "compress_huffman_encode",
         "compress_huffman_decode",
         "numeric_sieve_of_eratosthenes",
@@ -136,6 +138,22 @@ def test_mcp_graph_topological_sort():
     """Verifies the Topological Sort tool returns a valid dependency order."""
     graph = {"A": ["B"], "B": ["C"], "C": []}
     assert mcp_server.graph_topological_sort(graph) == {"order": ["A", "B", "C"]}
+
+
+def test_mcp_graph_breadth_first_search():
+    """Verifies the BFS tool returns level-order traversal output."""
+    graph = {"A": ["B", "C"], "B": ["D"], "C": ["E"], "D": [], "E": []}
+    assert mcp_server.graph_breadth_first_search(graph, "A") == {
+        "order": ["A", "B", "C", "D", "E"]
+    }
+
+
+def test_mcp_graph_depth_first_search():
+    """Verifies the DFS tool returns deterministic preorder traversal output."""
+    graph = {"A": ["B", "C"], "B": ["D"], "C": ["E"], "D": [], "E": []}
+    assert mcp_server.graph_depth_first_search(graph, "A") == {
+        "order": ["A", "B", "D", "C", "E"]
+    }
 
 
 def test_mcp_compress_huffman_round_trip():

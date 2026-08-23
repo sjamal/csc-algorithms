@@ -3,6 +3,8 @@
 import pytest
 from src.graphs.bellman_ford import bellman_ford
 from src.graphs.a_star import a_star
+from src.graphs.breadth_first_search import breadth_first_search
+from src.graphs.depth_first_search import depth_first_search
 from src.graphs.topological_sort import topological_sort
 
 
@@ -138,3 +140,53 @@ def test_topological_sort_undeclared_node_reference():
 
     with pytest.raises(ValueError, match="undeclared node"):
         topological_sort(malformed_graph)
+
+
+def test_breadth_first_search_level_order():
+    """Verifies BFS visits reachable nodes level by level in adjacency order."""
+    graph = {
+        "A": ["B", "C"],
+        "B": ["D"],
+        "C": ["E"],
+        "D": [],
+        "E": [],
+        "F": [],
+    }
+
+    assert breadth_first_search(graph, "A") == ["A", "B", "C", "D", "E"]
+
+
+def test_depth_first_search_preorder():
+    """Verifies iterative DFS preserves adjacency order in preorder traversal."""
+    graph = {
+        "A": ["B", "C"],
+        "B": ["D"],
+        "C": ["E"],
+        "D": [],
+        "E": [],
+    }
+
+    assert depth_first_search(graph, "A") == ["A", "B", "D", "C", "E"]
+
+
+def test_depth_first_search_handles_cycles():
+    """Ensures DFS ignores nodes already visited when a graph contains a cycle."""
+    graph = {"A": ["B"], "B": ["A"]}
+
+    assert depth_first_search(graph, "A") == ["A", "B"]
+
+
+@pytest.mark.parametrize("traversal", [breadth_first_search, depth_first_search])
+def test_graph_traversals_validate_source_and_edges(traversal):
+    """Ensures both traversals reject missing sources and undeclared neighbors."""
+    with pytest.raises(ValueError, match="Source key"):
+        traversal({"A": []}, "Z")
+
+    with pytest.raises(ValueError, match="undeclared node"):
+        traversal({"A": ["Z"]}, "A")
+
+
+@pytest.mark.parametrize("traversal", [breadth_first_search, depth_first_search])
+def test_graph_traversals_handle_empty_source_component(traversal):
+    """Ensures both traversals return the source when it has no outgoing edges."""
+    assert traversal({"A": [], "B": []}, "A") == ["A"]

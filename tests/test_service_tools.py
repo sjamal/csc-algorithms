@@ -132,6 +132,22 @@ def test_graph_topological_sort():
     assert tools.graph_topological_sort(graph) == {"order": ["A", "B", "C"]}
 
 
+def test_graph_breadth_first_search():
+    """Verifies BFS wrapper returns level-order traversal output."""
+    graph = {"A": ["B", "C"], "B": ["D"], "C": ["E"], "D": [], "E": []}
+    assert tools.graph_breadth_first_search(graph, "A") == {
+        "order": ["A", "B", "C", "D", "E"]
+    }
+
+
+def test_graph_depth_first_search():
+    """Verifies DFS wrapper returns deterministic preorder traversal output."""
+    graph = {"A": ["B", "C"], "B": ["D"], "C": ["E"], "D": [], "E": []}
+    assert tools.graph_depth_first_search(graph, "A") == {
+        "order": ["A", "B", "D", "C", "E"]
+    }
+
+
 def test_compress_huffman_round_trip():
     """Verifies Huffman encode/decode wrappers recover the original text."""
     encoded = tools.compress_huffman_encode("abracadabra")

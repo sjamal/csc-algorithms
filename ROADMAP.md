@@ -41,8 +41,8 @@ This document serves as the long-term architectural roadmap for this learning re
 *   **Binary Search**: Divide-and-conquer $O(\log n)$ lookup resolving a target's position within a sorted array. (Completed)
 
 ### Phase 7: Graph Traversal & Minimum Spanning Trees
-*   **Breadth-First Search (BFS)**: Queue-driven level-order graph traversal resolving shortest unweighted paths and reachability.
-*   **Depth-First Search (DFS)**: Stack/recursion-driven graph traversal resolving connectivity, cycle detection, and ordering.
+*   **Breadth-First Search (BFS)**: Queue-driven level-order graph traversal resolving shortest unweighted paths and reachability. (Completed)
+*   **Depth-First Search (DFS)**: Stack/recursion-driven graph traversal resolving connectivity, cycle detection, and ordering. (Completed)
 *   **Kruskal's Algorithm**: Greedy edge-sorted minimum spanning tree construction built atop the existing Union-Find structure.
 
 ### Phase 8: Numerical Methods & Ranking Algorithms
