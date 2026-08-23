@@ -16,6 +16,7 @@ from src.compression.huffman import encode as _huffman_encode
 from src.data_structures.avl_tree import AVLTree
 from src.data_structures.bst import BinarySearchTree
 from src.data_structures.dijkstra import dijkstra
+from src.data_structures.union_find import UnionFind
 from src.graphs.a_star import a_star
 from src.graphs.bellman_ford import bellman_ford
 from src.graphs.topological_sort import topological_sort
@@ -74,6 +75,24 @@ def build_and_query_avl_tree(
     }
     if search_for is not None:
         result["found"] = tree.search(search_for)
+    return result
+
+
+def build_and_query_union_find(
+    elements: List[str], unions: List[List[str]], query: Optional[List[str]] = None
+) -> Dict:
+    """Builds a Union-Find over `elements`, applies `unions`, and reports resulting groups."""
+    uf = UnionFind(elements)
+    for first, second in unions:
+        uf.union(first, second)
+
+    groups: Dict[str, List[str]] = {}
+    for element in elements:
+        groups.setdefault(uf.find(element), []).append(element)
+
+    result: Dict = {"groups": sorted((sorted(members) for members in groups.values()))}
+    if query is not None:
+        result["connected"] = uf.connected(query[0], query[1])
     return result
 
 

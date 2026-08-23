@@ -19,6 +19,7 @@ def test_mcp_tool_registry_contains_all_algorithms():
         "search_kmp",
         "build_and_query_bst",
         "build_and_query_avl_tree",
+        "build_and_query_union_find",
         "graph_dijkstra",
         "graph_bellman_ford",
         "graph_a_star",
@@ -53,6 +54,16 @@ def test_mcp_build_and_query_avl_tree():
     assert result["inorder"] == [1, 2, 3, 4, 5, 6, 7]
     assert result["height"] == 3
     assert result["found"] is True
+
+
+def test_mcp_build_and_query_union_find():
+    """Verifies the Union-Find tool applies unions and reports groups/connectivity."""
+    result = mcp_server.build_and_query_union_find(
+        elements=["A", "B", "C"],
+        unions=[["A", "B"]],
+        query=["A", "C"],
+    )
+    assert result == {"groups": [["A", "B"], ["C"]], "connected": False}
 
 
 def test_mcp_graph_dijkstra():

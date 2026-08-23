@@ -36,6 +36,24 @@ def test_build_and_query_avl_tree():
     assert result["found"] is True
 
 
+def test_build_and_query_union_find():
+    """Verifies Union-Find wrapper applies unions and reports groups/connectivity."""
+    result = tools.build_and_query_union_find(
+        elements=["A", "B", "C", "D"],
+        unions=[["A", "B"], ["C", "D"]],
+        query=["A", "C"],
+    )
+    assert result["groups"] == [["A", "B"], ["C", "D"]]
+    assert result["connected"] is False
+
+
+def test_build_and_query_union_find_without_query():
+    """Ensures the 'connected' key is omitted when no query pair is provided."""
+    result = tools.build_and_query_union_find(["A", "B"], unions=[["A", "B"]])
+    assert "connected" not in result
+    assert result["groups"] == [["A", "B"]]
+
+
 def test_graph_dijkstra():
     """Verifies Dijkstra wrapper converts JSON edge lists and computes distances."""
     graph = {"A": [["B", 1]], "B": [["C", 2]], "C": []}

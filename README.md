@@ -87,6 +87,7 @@ The architectural choices, trade-offs, and design patterns for each algorithm ar
 * [ADR 0010: Min-Heap Greedy Merge for Huffman Coding](docs/adr/0010-use-min-heap-greedy-merge-for-huffman-coding.md)
 * [ADR 0011: Kahn's In-Degree BFS for Topological Sort](docs/adr/0011-use-kahns-in-degree-bfs-for-topological-sort.md)
 * [ADR 0012: Iterative Boolean Marking for Sieve of Eratosthenes](docs/adr/0012-use-iterative-boolean-marking-for-sieve-of-eratosthenes.md)
+* [ADR 0013: Union by Rank with Path Compression for Union-Find](docs/adr/0013-use-union-by-rank-with-path-compression-for-union-find.md)
 
 ---
 
@@ -111,4 +112,4 @@ To ensure uniformity, this repository follows strict standards derived from **PE
 9. **Cycle & Referential Integrity Guards:** Topological Sort validates that every edge references a declared node and raises a `ValueError` when a cycle prevents a complete ordering, rather than silently returning a partial or misleading sequence.
 10. **Bounded Memory Allocation:** The Sieve of Eratosthenes allocates its boolean tracking array based on the caller-supplied boundary; callers should validate untrusted boundary inputs against a sane upper limit before use to avoid excessive memory allocation.
 11. **Service Layer Input Validation:** The HTTP API validates request bodies via Pydantic schemas and translates algorithm-level `ValueError`s into HTTP 400 responses rather than leaking stack traces; both the MCP server and HTTP API are stateless per call, so no client-supplied data persists across requests.
-
+12. **Fixed Element Universe:** Union-Find validates every `find()`/`union()` call against its initial element set and raises a `ValueError` for unknown elements, preventing silent creation of untracked entries.
