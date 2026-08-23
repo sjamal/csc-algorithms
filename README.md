@@ -60,6 +60,7 @@ The architectural choices, trade-offs, and design patterns for each algorithm ar
 * [ADR 0006: NumPy eigh Covariance PCA](docs/adr/0006-numpy-eigh-covariance-principal-component-analysis.md)
 * [ADR 0007: Edge-List Relaxation for Bellman-Ford](docs/adr/0007-use-edge-list-relaxation-for-bellman-ford.md)
 * [ADR 0008: Euclidean Heuristic for A* Pathfinding](docs/adr/0008-use-euclidean-heuristic-for-a-star.md)
+* [ADR 0009: AVL Rotations for Self-Balancing BST](docs/adr/0009-use-avl-rotations-for-self-balancing-bst.md)
 
 ---
 
@@ -79,5 +80,6 @@ To ensure uniformity, this repository follows strict standards derived from **PE
 4. **Data Isolation:** This package operates entirely locally on internal operational states. No logging pipelines, web tracing, or environment data tracking hooks are implemented, ensuring maximum data privacy.
 5. **Negative-Weight Cycle Guarding:** The Bellman-Ford implementation runs an explicit final relaxation pass to detect reachable negative-weight cycles and raises a `ValueError` rather than allowing an untrusted graph payload to loop indefinitely.
 6. **Heuristic Input Validation:** The A* implementation validates that source, target, and coordinate metadata exist before search begins, and rejects negative edge weights, preventing malformed spatial graphs from corrupting the heuristic scoring.
+7. **Balanced Depth Guarantee:** The AVL Tree rebalances on every insert and delete, preventing adversarial sorted-input sequences from degrading traversal operations to linear time.
 
 
