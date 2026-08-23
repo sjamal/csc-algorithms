@@ -20,7 +20,7 @@ This document serves as the long-term architectural roadmap for this learning re
 
 ### Phase 3: Self-Balancing Trees & Data Compression
 *   **AVL or Red-Black Trees**: Self-adjusting trees that maintain a maximum $O(\log n)$ runtime depth across adversarial data sets. (Completed)
-*   **Huffman Coding**: Greedy tree construction designed to output optimal variable-length character prefix maps.
+*   **Huffman Coding**: Greedy tree construction designed to output optimal variable-length character prefix maps. (Completed)
 *   **Topological Sort (Kahn's Algorithm)**: In-degree tracked BFS ordering resolving dependency sequencing across directed acyclic graphs.
 *   **Sieve of Eratosthenes**: Iterative marking sieve generating prime number sequences up to a defined boundary.
 
