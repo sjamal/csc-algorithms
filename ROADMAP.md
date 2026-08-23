@@ -26,7 +26,7 @@ This document serves as the long-term architectural roadmap for this learning re
 
 ### Phase 4: Foundational Structures & Sorting Alternatives
 *   **Union-Find (Disjoint Set)**: Path-compressed, rank-unioned set tracking structure resolving connectivity queries in near-constant time. (Completed)
-*   **Merge Sort**: Stable divide-and-conquer sorting engine contrasting Quicksort's in-place, non-stable partitioning approach.
+*   **Merge Sort**: Stable divide-and-conquer sorting engine contrasting Quicksort's in-place, non-stable partitioning approach. (Completed)
 *   **Singly Linked List**: Pointer-chained sequential collection supporting traversal, insertion, and reversal operations.
 
 ### Phase 5: Dynamic Programming & Sequence Analysis
