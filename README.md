@@ -92,6 +92,7 @@ The architectural choices, trade-offs, and design patterns for each algorithm ar
 * [ADR 0015: Iterative Pointer Rewiring for Singly Linked List Reversal](docs/adr/0015-use-iterative-pointer-rewiring-for-singly-linked-list-reversal.md)
 * [ADR 0016: Bottom-Up Tabulation with Backtracking for 0/1 Knapsack](docs/adr/0016-use-bottom-up-tabulation-with-backtracking-for-01-knapsack.md)
 * [ADR 0017: Bottom-Up Tabulation with Diagonal Backtracking for LCS](docs/adr/0017-use-bottom-up-tabulation-with-diagonal-backtracking-for-lcs.md)
+* [ADR 0018: Binary Max-Heap for Heap Sort](docs/adr/0018-use-binary-max-heap-for-heap-sort.md)
 
 ---
 
@@ -121,3 +122,4 @@ To ensure uniformity, this repository follows strict standards derived from **PE
 14. **Bounded Traversal Footprint:** The Singly Linked List's `search`/`delete`/`reverse` operations are strictly O(n) iterative walks with no recursion, preventing stack-depth exhaustion on very large untrusted input lists.
 15. **Iterative DP, No Recursion Limits:** The 0/1 Knapsack solver uses bottom-up tabulation rather than top-down recursion, avoiding Python's `RecursionError` on large item counts.
 16. **Quadratic Complexity Awareness:** LCS runs in $O(n \times m)$ time and space; callers should bound input string lengths when comparing untrusted, attacker-controlled text to avoid excessive memory allocation on very large inputs.
+17. **In-Place Worst-Case Guarantee:** Heap Sort provides the same $O(n \log n)$ worst-case guarantee as Merge Sort but with $O(1)$ auxiliary space, useful when both adversarial-input resilience and memory constraints matter simultaneously.
