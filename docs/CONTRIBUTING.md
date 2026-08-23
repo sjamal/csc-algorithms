@@ -15,6 +15,12 @@ pip install -r requirements.txt
 
 `.venv/` is self-ignored (it ships its own `.gitignore`), so it never needs to be added to the repo's ignore rules. Use `.venv/bin/pytest`, `.venv/bin/black`, etc. if the venv isn't activated in your shell.
 
+> **Two Python environments exist.** The local pre-commit hook (see Section 4) runs `pytest`/`black` from a separate, globally-installed interpreter — not `.venv`. If you add a new dependency (e.g. to `service/`), install it in **both** places, or the hook will fail with `ModuleNotFoundError` at commit time:
+> ```bash
+> .venv/bin/pip install <package>
+> pip install <package>   # whatever interpreter your shell's `pytest`/`black` resolves to
+> ```
+
 ## 2. Starting Work: Branching
 
 Always branch off an up-to-date `main`. Use a `feature/<phase-or-topic>-<short-description>` naming convention, mirroring the roadmap phase where possible:
@@ -28,19 +34,20 @@ git checkout -b feature/phase-3-topological-sort
 ## 3. Implementing an Algorithm/Feature
 
 Each new algorithm addition should include, as applicable:
-1. **Source file(s)** under `src/<domain>/` (e.g. `src/graphs/`, `src/data_structures/`), with type hints, docstrings, and a complexity analysis comment block.
+1. **Source file(s)** under `src/<domain>/` (e.g. `src/graphs/`, `src/data_structures/`), with type hints, docstrings, and a complexity analysis comment block. Create a new domain package (with its own `__init__.py`) when the algorithm doesn't fit an existing one.
 2. **Tests** under `tests/test_<domain>.py`, covering the happy path, edge cases, and invalid/malicious input handling — targeting **100% coverage**.
-3. **An ADR** under `docs/adr/NNNN-title.md` documenting the design decision and trade-offs (see existing ADRs for the format).
+3. **An ADR** under `docs/adr/NNNN-title.md` documenting the design decision and trade-offs (see existing ADRs for the format). ADR `0000` is reserved for foundational/infrastructure decisions (e.g. the service layer); algorithm ADRs are numbered sequentially from `0001` in implementation order.
 4. **README.md** updates: link the new ADR, and add a line under "Security, Stability & Privacy Considerations" if relevant.
 5. **ROADMAP.md** updates: mark the item `(Completed)`.
+6. **Service layer exposure** (unless the algorithm is purely internal): wire the new algorithm into all three of `service/tools.py` (transport-agnostic JSON-friendly wrapper), `service/mcp_server.py` (matching `@mcp.tool()`), and `service/http_app.py` (Pydantic request model + `POST` endpoint) — each with corresponding tests in `tests/test_service_tools.py`, `tests/test_service_mcp_server.py` (including the tool-registry name-set assertion), and `tests/test_service_http_app.py`. Stateful structures (trees, etc.) should be exposed **statelessly** — rebuild from the full input on every call rather than holding server-side session state.
 
 ## 4. Formatting & Local Verification
 
 Run these before committing — a pre-commit hook enforces them anyway, but running locally first avoids failed commits:
 
 ```bash
-.venv/bin/black src/ tests/
-.venv/bin/pytest tests/ --cov=src --cov-report=term-missing
+.venv/bin/black src/ tests/ service/
+.venv/bin/pytest tests/ --cov=src --cov=service --cov-report=term-missing
 ```
 
 Confirm the coverage report shows 100% for all modified/added files.
@@ -100,8 +107,8 @@ git fetch origin --prune                          # clears stale remote-tracking
 |---|---|
 | Sync main | `git checkout main && git pull origin main` |
 | New branch | `git checkout -b feature/<name>` |
-| Format | `.venv/bin/black src/ tests/` |
-| Test + coverage | `.venv/bin/pytest tests/ --cov=src --cov-report=term-missing` |
+| Format | `.venv/bin/black src/ tests/ service/` |
+| Test + coverage | `.venv/bin/pytest tests/ --cov=src --cov=service --cov-report=term-missing` |
 | Push | `git push -u origin <branch>` |
 | Open PR | `gh pr create --title "..." --body "..." --base main --head <branch>` |
 | Merge PR | `gh pr merge --squash --delete-branch` |
