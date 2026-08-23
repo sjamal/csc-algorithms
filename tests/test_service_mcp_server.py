@@ -18,6 +18,7 @@ def test_mcp_tool_registry_contains_all_algorithms():
         "sort_quicksort",
         "sort_merge_sort",
         "sort_heap_sort",
+        "search_binary_search",
         "search_kmp",
         "build_and_query_bst",
         "build_and_query_avl_tree",
@@ -50,6 +51,12 @@ def test_mcp_sort_merge_sort():
 def test_mcp_sort_heap_sort():
     """Verifies the Heap Sort tool returns an ascending-order list."""
     assert mcp_server.sort_heap_sort([5, 2, 4, 1, 3]) == [1, 2, 3, 4, 5]
+
+
+def test_mcp_search_binary_search():
+    """Verifies the Binary Search tool returns the correct index, or -1 if absent."""
+    assert mcp_server.search_binary_search([1, 3, 5, 7, 9], target=7) == {"index": 3}
+    assert mcp_server.search_binary_search([1, 3, 5, 7, 9], target=4) == {"index": -1}
 
 
 def test_mcp_search_kmp():
