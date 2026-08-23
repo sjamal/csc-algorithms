@@ -58,6 +58,12 @@ class LinkedListRequest(BaseModel):
     reverse: bool = False
 
 
+class TrieRequest(BaseModel):
+    words: List[str]
+    search_for: Optional[str] = None
+    prefix: Optional[str] = None
+
+
 class KnapsackRequest(BaseModel):
     weights: List[int]
     values: List[int]
@@ -106,6 +112,15 @@ class HuffmanDecodeRequest(BaseModel):
 
 class SieveRequest(BaseModel):
     limit: int
+
+
+class GcdRequest(BaseModel):
+    first: int
+    second: int
+
+
+class ParenthesesRequest(BaseModel):
+    text: str
 
 
 class ClusterRequest(BaseModel):
@@ -180,6 +195,17 @@ def build_and_query_linked_list(request: LinkedListRequest) -> Dict:
         request.values,
         request.search_for,
         request.reverse,
+    )
+
+
+@app.post("/data-structures/trie")
+def build_and_query_trie(request: TrieRequest) -> Dict:
+    """Builds a Trie and reports exact and prefix-based queries."""
+    return _call(
+        tools.build_and_query_trie,
+        request.words,
+        request.search_for,
+        request.prefix,
     )
 
 
@@ -261,6 +287,18 @@ def compress_huffman_decode(request: HuffmanDecodeRequest) -> Dict:
 def numeric_sieve_of_eratosthenes(request: SieveRequest) -> Dict:
     """Returns every prime number in the inclusive range [2, limit]."""
     return _call(tools.numeric_sieve_of_eratosthenes, request.limit)
+
+
+@app.post("/numeric/greatest-common-divisor")
+def numeric_greatest_common_divisor(request: GcdRequest) -> Dict:
+    """Returns the greatest common divisor of two integers."""
+    return _call(tools.numeric_greatest_common_divisor, request.first, request.second)
+
+
+@app.post("/data-structures/valid-parentheses")
+def validate_parentheses(request: ParenthesesRequest) -> Dict:
+    """Checks whether brackets in the text are correctly nested and closed."""
+    return _call(tools.validate_parentheses, request.text)
 
 
 @app.post("/machine-learning/kmeans")

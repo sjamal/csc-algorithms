@@ -6,6 +6,8 @@ from src.data_structures.bst import BinarySearchTree
 from src.data_structures.avl_tree import AVLTree
 from src.data_structures.union_find import UnionFind
 from src.data_structures.linked_list import SinglyLinkedList
+from src.data_structures.trie import Trie
+from src.data_structures.valid_parentheses import valid_parentheses
 
 
 @pytest.fixture
@@ -302,3 +304,40 @@ def test_linked_list_reverse_empty_list_is_a_no_op():
     assert linked_list.to_list() == []
     assert linked_list.head is None
     assert linked_list.tail is None
+
+
+def test_trie_lookup_and_autocomplete():
+    """Verifies Trie exact lookup, prefix lookup, and sorted suggestions."""
+    trie = Trie()
+    for word in ["cat", "car", "dog"]:
+        trie.insert(word)
+
+    assert trie.search("cat") is True
+    assert trie.search("can") is False
+    assert trie.starts_with("ca") is True
+    assert trie.autocomplete("ca") == ["car", "cat"]
+    assert trie.autocomplete("z") == []
+
+
+def test_trie_handles_empty_word_and_prefix():
+    """Ensures an empty word and empty prefix are handled as valid Trie queries."""
+    trie = Trie()
+    trie.insert("")
+    trie.insert("a")
+
+    assert trie.search("") is True
+    assert trie.starts_with("") is True
+    assert trie.autocomplete("") == ["", "a"]
+
+
+def test_valid_parentheses():
+    """Verifies nested brackets and non-bracket expression characters."""
+    assert valid_parentheses("{a + [b * (c)]}") is True
+    assert valid_parentheses("") is True
+
+
+def test_invalid_parentheses():
+    """Verifies mismatched, prematurely closed, and unclosed brackets fail."""
+    assert valid_parentheses("([)]") is False
+    assert valid_parentheses(")") is False
+    assert valid_parentheses("(") is False

@@ -82,6 +82,14 @@ def build_and_query_linked_list(
 
 
 @mcp.tool()
+def build_and_query_trie(
+    words: List[str], search_for: Optional[str] = None, prefix: Optional[str] = None
+) -> Dict:
+    """Builds a Trie from `words` and reports exact and prefix-based queries."""
+    return tools.build_and_query_trie(words, search_for, prefix)
+
+
+@mcp.tool()
 def dp_knapsack_01(weights: List[int], values: List[int], capacity: int) -> Dict:
     """Selects a subset of items maximizing total value within a fixed weight capacity."""
     return tools.dp_knapsack_01(weights, values, capacity)
@@ -156,6 +164,18 @@ def compress_huffman_decode(encoded_bits: str, codebook: Dict[str, str]) -> Dict
 def numeric_sieve_of_eratosthenes(limit: int) -> Dict:
     """Returns every prime number in the inclusive range [2, limit]."""
     return tools.numeric_sieve_of_eratosthenes(limit)
+
+
+@mcp.tool()
+def numeric_greatest_common_divisor(first: int, second: int) -> Dict:
+    """Returns the greatest common divisor of two integers."""
+    return tools.numeric_greatest_common_divisor(first, second)
+
+
+@mcp.tool()
+def validate_parentheses(text: str) -> Dict:
+    """Checks whether brackets in `text` are correctly nested and closed."""
+    return tools.validate_parentheses(text)
 
 
 @mcp.tool()

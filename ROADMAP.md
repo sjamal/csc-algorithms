@@ -34,10 +34,10 @@ This document serves as the long-term architectural roadmap for this learning re
 *   **Longest Common Subsequence (LCS)**: Relational alignment mapping tracking matching sub-segments within strings. (Completed)
 
 ### Phase 6: Foundational Primitives & Auxiliary Structures
-*   **Trie (Prefix Tree)**: Character-branching tree structure resolving prefix-based word lookups and autocomplete-style queries.
+*   **Trie (Prefix Tree)**: Character-branching tree structure resolving prefix-based word lookups and autocomplete-style queries. (Completed)
 *   **Heap Sort**: In-place comparison sort built atop a binary max-heap, contrasting Quicksort/Merge Sort's partitioning and merging strategies. (Completed)
-*   **Euclidean Algorithm (GCD)**: Iterative remainder-based reduction resolving the greatest common divisor between two integers.
-*   **Valid Parentheses (Stack-Based Matching)**: Stack-tracked bracket balancing validating correctly nested and closed symbol pairs.
+*   **Euclidean Algorithm (GCD)**: Iterative remainder-based reduction resolving the greatest common divisor between two integers. (Completed)
+*   **Valid Parentheses (Stack-Based Matching)**: Stack-tracked bracket balancing validating correctly nested and closed symbol pairs. (Completed)
 *   **Binary Search**: Divide-and-conquer $O(\log n)$ lookup resolving a target's position within a sorted array. (Completed)
 
 ### Phase 7: Graph Traversal & Minimum Spanning Trees

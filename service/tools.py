@@ -17,7 +17,9 @@ from src.data_structures.avl_tree import AVLTree
 from src.data_structures.bst import BinarySearchTree
 from src.data_structures.dijkstra import dijkstra
 from src.data_structures.linked_list import SinglyLinkedList
+from src.data_structures.trie import Trie
 from src.data_structures.union_find import UnionFind
+from src.data_structures.valid_parentheses import valid_parentheses
 from src.dynamic_programming.knapsack import knapsack_01
 from src.dynamic_programming.lcs import longest_common_subsequence
 from src.graphs.a_star import a_star
@@ -29,6 +31,7 @@ from src.graphs.topological_sort import topological_sort
 from src.machine_learning.kmeans import KMeans
 from src.machine_learning.pca import PCA
 from src.numeric.sieve import sieve_of_eratosthenes
+from src.numeric.gcd import greatest_common_divisor
 from src.searching.binary_search import binary_search
 from src.sorting.heap_sort import heap_sort
 from src.sorting.merge_sort import merge_sort
@@ -137,6 +140,23 @@ def build_and_query_linked_list(
     return result
 
 
+def build_and_query_trie(
+    words: List[str], search_for: Optional[str] = None, prefix: Optional[str] = None
+) -> Dict:
+    """Builds a Trie from `words` and reports exact and prefix-based queries."""
+    trie = Trie()
+    for word in words:
+        trie.insert(word)
+
+    result: Dict = {}
+    if search_for is not None:
+        result["found"] = trie.search(search_for)
+    if prefix is not None:
+        result["starts_with"] = trie.starts_with(prefix)
+        result["suggestions"] = trie.autocomplete(prefix)
+    return result
+
+
 def dp_knapsack_01(weights: List[int], values: List[int], capacity: int) -> Dict:
     """Selects a subset of items maximizing total value within a fixed weight capacity."""
     max_value, selected_indices = knapsack_01(weights, values, capacity)
@@ -211,6 +231,16 @@ def compress_huffman_decode(encoded_bits: str, codebook: Dict[str, str]) -> Dict
 def numeric_sieve_of_eratosthenes(limit: int) -> Dict:
     """Returns every prime number in the inclusive range [2, limit]."""
     return {"primes": sieve_of_eratosthenes(limit)}
+
+
+def numeric_greatest_common_divisor(first: int, second: int) -> Dict:
+    """Returns the greatest common divisor of two integers."""
+    return {"gcd": greatest_common_divisor(first, second)}
+
+
+def validate_parentheses(text: str) -> Dict:
+    """Checks whether brackets in `text` are correctly nested and closed."""
+    return {"valid": valid_parentheses(text)}
 
 
 def ml_kmeans_cluster(points: List[List[float]], k: int, max_iters: int = 100) -> Dict:
