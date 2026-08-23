@@ -19,10 +19,17 @@ This document serves as the long-term architectural roadmap for this learning re
 *   **A* Pathfinding Optimization**: Heuristic-driven spatial routing designed for rapid topological traversal. (Completed)
 
 ### Phase 3: Self-Balancing Trees & Data Compression
-*   **AVL or Red-Black Trees**: Self-adjusting trees that maintain a maximum $O(\log n)$ runtime depth across adversarial data sets.
+*   **AVL or Red-Black Trees**: Self-adjusting trees that maintain a maximum $O(\log n)$ runtime depth across adversarial data sets. (Completed)
 *   **Huffman Coding**: Greedy tree construction designed to output optimal variable-length character prefix maps.
+*   **Topological Sort (Kahn's Algorithm)**: In-degree tracked BFS ordering resolving dependency sequencing across directed acyclic graphs.
+*   **Sieve of Eratosthenes**: Iterative marking sieve generating prime number sequences up to a defined boundary.
 
-### Phase 4: Dynamic Programming & Sequence Analysis
+### Phase 4: Foundational Structures & Sorting Alternatives
+*   **Union-Find (Disjoint Set)**: Path-compressed, rank-unioned set tracking structure resolving connectivity queries in near-constant time.
+*   **Merge Sort**: Stable divide-and-conquer sorting engine contrasting Quicksort's in-place, non-stable partitioning approach.
+*   **Singly Linked List**: Pointer-chained sequential collection supporting traversal, insertion, and reversal operations.
+
+### Phase 5: Dynamic Programming & Sequence Analysis
 *   **0/1 Knapsack Problem**: Tabular matrix memoization framework designed to resolve finite profit boundaries.
 *   **Longest Common Subsequence (LCS)**: Relational alignment mapping tracking matching sub-segments within strings.
 
