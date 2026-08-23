@@ -116,6 +116,12 @@ def sort_merge_sort(request: SortRequest) -> List[int]:
     return _call(tools.sort_merge_sort, request.values)
 
 
+@app.post("/sorting/heap-sort")
+def sort_heap_sort(request: SortRequest) -> List[int]:
+    """Sorts a list of integers in ascending order using Heap Sort."""
+    return _call(tools.sort_heap_sort, request.values)
+
+
 @app.post("/string-matching/kmp")
 def search_kmp(request: KmpSearchRequest) -> List[int]:
     """Finds every 0-indexed starting position of a pattern within a text."""

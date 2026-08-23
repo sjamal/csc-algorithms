@@ -15,6 +15,11 @@ def test_sort_merge_sort():
     assert tools.sort_merge_sort([5, 2, 4, 1, 3]) == [1, 2, 3, 4, 5]
 
 
+def test_sort_heap_sort():
+    """Verifies Heap Sort wrapper returns an ascending-order list."""
+    assert tools.sort_heap_sort([5, 2, 4, 1, 3]) == [1, 2, 3, 4, 5]
+
+
 def test_search_kmp():
     """Verifies KMP wrapper returns matching start indices."""
     assert tools.search_kmp("ababcababc", "abc") == [2, 7]

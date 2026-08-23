@@ -35,7 +35,7 @@ This document serves as the long-term architectural roadmap for this learning re
 
 ### Phase 6: Foundational Primitives & Auxiliary Structures
 *   **Trie (Prefix Tree)**: Character-branching tree structure resolving prefix-based word lookups and autocomplete-style queries.
-*   **Heap Sort**: In-place comparison sort built atop a binary max-heap, contrasting Quicksort/Merge Sort's partitioning and merging strategies.
+*   **Heap Sort**: In-place comparison sort built atop a binary max-heap, contrasting Quicksort/Merge Sort's partitioning and merging strategies. (Completed)
 *   **Euclidean Algorithm (GCD)**: Iterative remainder-based reduction resolving the greatest common divisor between two integers.
 *   **Valid Parentheses (Stack-Based Matching)**: Stack-tracked bracket balancing validating correctly nested and closed symbol pairs.
 
