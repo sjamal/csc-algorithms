@@ -1,9 +1,10 @@
-"""Comprehensive evaluation suite tracking Dijkstra, BST, and AVL Tree operations."""
+"""Comprehensive evaluation suite tracking Dijkstra, BST, AVL Tree, and Union-Find operations."""
 
 import pytest
 from src.data_structures.dijkstra import dijkstra
 from src.data_structures.bst import BinarySearchTree
 from src.data_structures.avl_tree import AVLTree
+from src.data_structures.union_find import UnionFind
 
 
 @pytest.fixture
@@ -153,3 +154,60 @@ def test_avl_delete_node_with_only_left_child():
 
     assert avl.search(10) is False
     assert avl.inorder_traversal() == [5, 20, 30]
+
+
+def test_union_find_connects_and_reports_membership():
+    """Verifies unioned elements report as connected, and unmerged ones do not."""
+    uf = UnionFind(["A", "B", "C", "D", "E"])
+
+    assert uf.union("A", "B") is True
+    assert uf.union("B", "C") is True
+
+    assert uf.connected("A", "C") is True
+    assert uf.connected("A", "D") is False
+
+
+def test_union_find_redundant_union_returns_false():
+    """Ensures unioning already-connected elements is a no-op reported via return value."""
+    uf = UnionFind(["A", "B"])
+    uf.union("A", "B")
+
+    assert uf.union("A", "B") is False
+
+
+def test_union_find_path_compression_flattens_chain():
+    """Ensures a find() call compresses a multi-level chain so nodes point directly to the root."""
+    uf = UnionFind(["A", "B", "C", "D"])
+    uf.union("A", "B")  # A becomes root of {A, B}
+    uf.union("C", "D")  # C becomes root of {C, D}
+    uf.union(
+        "A", "C"
+    )  # Equal-rank merge: A absorbs C, leaving D two levels deep (D -> C -> A)
+
+    assert (
+        uf._parent["D"] == "C"
+    )  # Before compression, D is not yet a direct child of the root
+
+    root = uf.find("D")
+
+    assert root == "A"
+    assert uf._parent["D"] == root  # After compression, D points directly to the root
+
+
+def test_union_find_rejects_unknown_element():
+    """Ensures querying an element outside the initial set raises a ValueError safely."""
+    uf = UnionFind(["A", "B"])
+
+    with pytest.raises(ValueError, match="does not exist"):
+        uf.find("Z")
+
+
+def test_union_find_attaches_lower_rank_tree_under_higher_rank_root():
+    """Ensures union() swaps operand order so the shorter tree attaches under the taller one."""
+    uf = UnionFind(["A", "B", "C"])
+    uf.union("A", "B")  # A becomes rank-1 root of {A, B}
+
+    # C (rank 0) is passed first; union() must still attach it under A's taller tree
+    uf.union("C", "A")
+
+    assert uf.find("C") == "A"

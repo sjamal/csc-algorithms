@@ -44,6 +44,20 @@ def test_http_build_and_query_avl_tree():
     assert body["found"] is False
 
 
+def test_http_build_and_query_union_find():
+    """Verifies the Union-Find endpoint applies unions and reports groups/connectivity."""
+    response = client.post(
+        "/data-structures/union-find",
+        json={
+            "elements": ["A", "B", "C"],
+            "unions": [["A", "B"]],
+            "query": ["A", "C"],
+        },
+    )
+    assert response.status_code == 200
+    assert response.json() == {"groups": [["A", "B"], ["C"]], "connected": False}
+
+
 def test_http_graph_dijkstra():
     """Verifies the Dijkstra endpoint computes shortest path distances."""
     response = client.post(
