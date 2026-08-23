@@ -28,6 +28,23 @@ def test_http_sort_heap_sort():
     assert response.json() == [1, 2, 3, 4, 5]
 
 
+def test_http_search_binary_search():
+    """Verifies the Binary Search endpoint returns the correct index, or -1 if absent."""
+    response = client.post(
+        "/searching/binary-search",
+        json={"sorted_values": [1, 3, 5, 7, 9], "target": 7},
+    )
+    assert response.status_code == 200
+    assert response.json() == {"index": 3}
+
+    response = client.post(
+        "/searching/binary-search",
+        json={"sorted_values": [1, 3, 5, 7, 9], "target": 4},
+    )
+    assert response.status_code == 200
+    assert response.json() == {"index": -1}
+
+
 def test_http_search_kmp():
     """Verifies the KMP search endpoint returns matching start indices."""
     response = client.post(

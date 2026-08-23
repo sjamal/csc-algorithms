@@ -26,6 +26,7 @@ from src.graphs.topological_sort import topological_sort
 from src.machine_learning.kmeans import KMeans
 from src.machine_learning.pca import PCA
 from src.numeric.sieve import sieve_of_eratosthenes
+from src.searching.binary_search import binary_search
 from src.sorting.heap_sort import heap_sort
 from src.sorting.merge_sort import merge_sort
 from src.sorting.quicksort import quicksort
@@ -57,6 +58,11 @@ def sort_merge_sort(values: List[int]) -> List[int]:
 def sort_heap_sort(values: List[int]) -> List[int]:
     """Sorts a list of integers in ascending order via Heap Sort."""
     return heap_sort(values)
+
+
+def search_binary_search(sorted_values: List[int], target: int) -> Dict:
+    """Returns the index of `target` within a sorted array, or -1 if absent."""
+    return {"index": binary_search(sorted_values, target)}
 
 
 def search_kmp(text: str, pattern: str) -> List[int]:

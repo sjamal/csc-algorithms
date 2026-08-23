@@ -40,6 +40,12 @@ def sort_heap_sort(values: List[int]) -> List[int]:
 
 
 @mcp.tool()
+def search_binary_search(sorted_values: List[int], target: int) -> Dict:
+    """Returns the index of `target` within a sorted array, or -1 if absent."""
+    return tools.search_binary_search(sorted_values, target)
+
+
+@mcp.tool()
 def search_kmp(text: str, pattern: str) -> List[int]:
     """Finds every 0-indexed starting position of `pattern` within `text`."""
     return tools.search_kmp(text, pattern)

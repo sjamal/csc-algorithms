@@ -31,6 +31,11 @@ class SortRequest(BaseModel):
     values: List[int]
 
 
+class BinarySearchRequest(BaseModel):
+    sorted_values: List[int]
+    target: int
+
+
 class KmpSearchRequest(BaseModel):
     text: str
     pattern: str
@@ -120,6 +125,12 @@ def sort_merge_sort(request: SortRequest) -> List[int]:
 def sort_heap_sort(request: SortRequest) -> List[int]:
     """Sorts a list of integers in ascending order using Heap Sort."""
     return _call(tools.sort_heap_sort, request.values)
+
+
+@app.post("/searching/binary-search")
+def search_binary_search(request: BinarySearchRequest) -> Dict:
+    """Returns the index of a target within a sorted array, or -1 if absent."""
+    return _call(tools.search_binary_search, request.sorted_values, request.target)
 
 
 @app.post("/string-matching/kmp")
