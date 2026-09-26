@@ -1,7 +1,9 @@
 """Comprehensive evaluation suite tracking the FastAPI HTTP service layer."""
 
+import pytest
 from fastapi.testclient import TestClient
 
+from service import http_app
 from service.http_app import app
 
 client = TestClient(app)
@@ -229,6 +231,41 @@ def test_http_graph_kruskal_disconnected_returns_400():
     assert "disconnected" in response.json()["detail"]
 
 
+def test_http_graph_traveling_salesman():
+    """Verifies the TSP endpoint returns an exact closed tour for a small graph."""
+    response = client.post(
+        "/graphs/traveling-salesman",
+        json={
+            "vertices": ["A", "B", "C", "D"],
+            "edges": [
+                ["A", "B", 1],
+                ["B", "C", 1],
+                ["C", "D", 1],
+                ["D", "A", 1],
+                ["A", "C", 2],
+                ["B", "D", 2],
+            ],
+        },
+    )
+    assert response.status_code == 200
+    assert response.json() == {
+        "tour": ["A", "D", "C", "B", "A"],
+        "cost": 4,
+        "method": "exact",
+        "optimal": True,
+    }
+
+
+def test_http_graph_traveling_salesman_incomplete_returns_400():
+    """Ensures an incomplete graph is surfaced as an HTTP 400 response."""
+    response = client.post(
+        "/graphs/traveling-salesman",
+        json={"vertices": ["A", "B", "C"], "edges": [["A", "B", 1]]},
+    )
+    assert response.status_code == 400
+    assert "not complete" in response.json()["detail"]
+
+
 def test_http_build_and_query_trie():
     """Verifies the Trie endpoint returns exact and prefix query results."""
     response = client.post(
@@ -289,7 +326,7 @@ def test_http_kmeans_cluster():
     """Verifies the K-Means endpoint returns JSON-serializable labels and centroids."""
     response = client.post(
         "/machine-learning/kmeans",
-        json={"points": [[0, 0], [0, 1], [10, 10], [10, 11]], "k": 2},
+        json={"points": [[0, 0], [0, 1], [10, 10], [10, 11]], "k": 2, "seed": 7},
     )
     assert response.status_code == 200
     body = response.json()
@@ -307,3 +344,50 @@ def test_http_pca_project():
     body = response.json()
     assert len(body["projected_points"]) == 4
     assert len(body["projected_points"][0]) == 1
+
+
+@pytest.mark.parametrize(
+    "path, payload",
+    [
+        ("/sorting/quicksort", {"values": [0] * (http_app.MAX_LIST_ITEMS + 1)}),
+        (
+            "/dynamic-programming/lcs",
+            {"first": "a" * (http_app.MAX_LCS_LENGTH + 1), "second": "a"},
+        ),
+        (
+            "/numeric/sieve-of-eratosthenes",
+            {"limit": http_app.MAX_SIEVE_LIMIT + 1},
+        ),
+        (
+            "/dynamic-programming/knapsack",
+            {
+                "weights": [1],
+                "values": [1],
+                "capacity": http_app.MAX_KNAPSACK_CAPACITY + 1,
+            },
+        ),
+        (
+            "/graphs/topological-sort",
+            {"graph": {str(i): [] for i in range(http_app.MAX_GRAPH_NODES + 1)}},
+        ),
+        (
+            "/graphs/traveling-salesman",
+            {
+                "vertices": [str(i) for i in range(http_app.MAX_TSP_VERTICES + 1)],
+                "edges": [],
+            },
+        ),
+        (
+            "/machine-learning/kmeans",
+            {
+                "points": [[0, 0], [1, 1]],
+                "k": 1,
+                "max_iters": http_app.MAX_KMEANS_ITERS + 1,
+            },
+        ),
+    ],
+)
+def test_http_rejects_oversized_requests(path, payload):
+    """Ensures request size caps reject oversized payloads with HTTP 422."""
+    response = client.post(path, json=payload)
+    assert response.status_code == 422

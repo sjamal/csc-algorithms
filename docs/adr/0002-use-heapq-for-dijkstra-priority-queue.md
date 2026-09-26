@@ -8,3 +8,7 @@
   * Eliminates external dependencies, preserving pure standard library runtime mechanics.
   * *Trade-off:* Lacks a native `decrease_key` operational primitive, requiring old states to remain on the heap and be skipped lazily via a verification check.
 
+---
+**ADRs:** Previous: [0001](0001-use-hoare-partitioning-for-quicksort.md) · Next: [0003](0003-use-lps-array-for-kmp-string-matching.md) · [ADR index](README.md)  
+**Related docs:** [Project README](../../README.md) · [Algorithm catalog](../algorithms.md) · [Runbook](../RUNBOOK.md) · [Contributing](../CONTRIBUTING.md)
+

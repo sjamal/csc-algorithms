@@ -7,3 +7,7 @@
   * Guarantees $O(n \log n)$ time in the best, average, and worst case, like Merge Sort, but with only $O(1)$ auxiliary space since the heap is built directly within the array being sorted.
   * *Trade-off:* Heap Sort is not stable (equal elements may be reordered during heap restructuring) and has weaker real-world cache locality than Quicksort due to its non-sequential index-jumping access pattern, so it typically runs slower in practice despite matching Merge Sort's worst-case guarantee.
 
+---
+**ADRs:** Previous: [0017](0017-use-bottom-up-tabulation-with-diagonal-backtracking-for-lcs.md) · Next: [0019](0019-use-iterative-midpoint-bisection-for-binary-search.md) · [ADR index](README.md)  
+**Related docs:** [Project README](../../README.md) · [Algorithm catalog](../algorithms.md) · [Runbook](../RUNBOOK.md) · [Contributing](../CONTRIBUTING.md)
+

@@ -8,3 +8,7 @@
   * Stability is preserved (equal elements retain their original relative order), which Quicksort's in-place partitioning scheme does not guarantee.
   * *Trade-off:* Requires $O(n)$ auxiliary space for the merge buffers at each level of recursion, versus Quicksort's $O(\log n)$ call-stack-only footprint; Quicksort remains the better default for large in-memory arrays where its worst case is mitigated (e.g., via pivot randomization).
 
+---
+**ADRs:** Previous: [0013](0013-use-union-by-rank-with-path-compression-for-union-find.md) · Next: [0015](0015-use-iterative-pointer-rewiring-for-singly-linked-list-reversal.md) · [ADR index](README.md)  
+**Related docs:** [Project README](../../README.md) · [Algorithm catalog](../algorithms.md) · [Runbook](../RUNBOOK.md) · [Contributing](../CONTRIBUTING.md)
+

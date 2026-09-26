@@ -28,6 +28,11 @@ from src.graphs.breadth_first_search import breadth_first_search
 from src.graphs.depth_first_search import depth_first_search
 from src.graphs.kruskal import Edge, kruskal
 from src.graphs.topological_sort import topological_sort
+from src.graphs.traveling_salesman import (
+    MAX_HELD_KARP_VERTICES,
+    held_karp,
+    nearest_neighbor_two_opt,
+)
 from src.machine_learning.kmeans import KMeans
 from src.machine_learning.pca import PCA
 from src.numeric.sieve import sieve_of_eratosthenes
@@ -217,6 +222,39 @@ def graph_kruskal(vertices: List[str], edges: List[List[object]]) -> Dict:
     return {"edges": [list(edge) for edge in selected_edges], "weight": total_weight}
 
 
+TSP_METHODS = ("auto", "exact", "heuristic")
+
+
+def graph_traveling_salesman(
+    vertices: List[str],
+    edges: List[List[object]],
+    start: Optional[str] = None,
+    method: str = "auto",
+) -> Dict:
+    """Finds a closed tour visiting every vertex once over a complete weighted graph.
+
+    `method` is "exact" (Held-Karp), "heuristic" (nearest-neighbor + 2-opt), or
+    "auto" (exact when the graph is small enough, otherwise heuristic).
+    """
+    if method not in TSP_METHODS:
+        raise ValueError(f"Method must be one of: {', '.join(TSP_METHODS)}.")
+
+    typed_edges: List[Edge] = [
+        (first, second, weight) for first, second, weight in edges
+    ]
+    use_exact = method == "exact" or (
+        method == "auto" and len(vertices) <= MAX_HELD_KARP_VERTICES
+    )
+    solver = held_karp if use_exact else nearest_neighbor_two_opt
+    tour, cost = solver(vertices, typed_edges, start)
+    return {
+        "tour": tour,
+        "cost": cost,
+        "method": "exact" if use_exact else "heuristic",
+        "optimal": use_exact,
+    }
+
+
 def compress_huffman_encode(text: str) -> Dict:
     """Compresses text into a bitstring using greedily-built variable-length codes."""
     encoded_bits, codebook = _huffman_encode(text)
@@ -243,10 +281,12 @@ def validate_parentheses(text: str) -> Dict:
     return {"valid": valid_parentheses(text)}
 
 
-def ml_kmeans_cluster(points: List[List[float]], k: int, max_iters: int = 100) -> Dict:
+def ml_kmeans_cluster(
+    points: List[List[float]], k: int, max_iters: int = 100, seed: int = 42
+) -> Dict:
     """Partitions data points into `k` clusters, returning labels and centroids."""
     data = np.array(points, dtype=float)
-    model = KMeans(k=k, max_iters=max_iters)
+    model = KMeans(k=k, max_iters=max_iters, seed=seed)
     labels = model.fit(data)
     return {"labels": labels.tolist(), "centroids": model.centroids.tolist()}
 

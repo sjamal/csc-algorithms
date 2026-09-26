@@ -1,6 +1,6 @@
 # Contributing Workflow Guide
 
-This guide documents the standard local-development and Git/GitHub workflow used in this repository. It's written so any developer (or automated agent) picking this project up can follow the same process without prior context.
+This guide documents the standard local-development and Git/GitHub workflow used in this repository. It's written so any developer (or automated agent) picking this project up can follow the same process without prior context. For day-to-day commands (tests, running the HTTP API and MCP server, sample requests), see the [runbook](RUNBOOK.md).
 
 ## 1. Environment Setup
 
@@ -10,7 +10,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 
 # Install project + dev/test dependencies
-pip install -r requirements.txt
+pip install -e '.[dev]'        # or: pip install -r requirements.txt
 ```
 
 Do not commit credentials, local environment files, private keys, coverage reports, or logs. The repository ignores common forms of these files; review `git status` and `git diff --cached` before pushing, and use environment variables for any local secrets.
@@ -38,8 +38,8 @@ git checkout -b feature/phase-3-topological-sort
 Each new algorithm addition should include, as applicable:
 1. **Source file(s)** under `src/<domain>/` (e.g. `src/graphs/`, `src/data_structures/`), with type hints, docstrings, and a complexity analysis comment block. Create a new domain package (with its own `__init__.py`) when the algorithm doesn't fit an existing one.
 2. **Tests** under `tests/test_<domain>.py`, covering the happy path, edge cases, and invalid/malicious input handling — targeting **100% coverage**.
-3. **An ADR** under `docs/adr/NNNN-title.md` documenting the design decision and trade-offs (see existing ADRs for the format). ADR `0000` is reserved for foundational/infrastructure decisions (e.g. the service layer); algorithm ADRs are numbered sequentially from `0001` in implementation order.
-4. **README.md** updates: link the new ADR, and add a line under "Security, Stability & Privacy Considerations" if relevant.
+3. **An ADR** under `docs/adr/NNNN-title.md` documenting the design decision and trade-offs (see existing ADRs for the format), added to the [ADR index](adr/README.md) with previous/next links. ADR `0000` is reserved for foundational/infrastructure decisions (e.g. the service layer); algorithm ADRs are numbered sequentially from `0001` in implementation order.
+4. **README.md** updates: link the new ADR, and add a line under "Security, Stability & Privacy Considerations" if relevant. Add the algorithm to the [algorithm catalog](algorithms.md).
 5. **ROADMAP.md** updates: mark the item `(Completed)`.
 6. **Service layer exposure** (unless the algorithm is purely internal): wire the new algorithm into all three of `service/tools.py` (transport-agnostic JSON-friendly wrapper), `service/mcp_server.py` (matching `@mcp.tool()`), and `service/http_app.py` (Pydantic request model + `POST` endpoint) — each with corresponding tests in `tests/test_service_tools.py`, `tests/test_service_mcp_server.py` (including the tool-registry name-set assertion), and `tests/test_service_http_app.py`. Stateful structures (trees, etc.) should be exposed **statelessly** — rebuild from the full input on every call rather than holding server-side session state.
 
@@ -129,3 +129,6 @@ git fetch origin --prune                          # clears stale remote-tracking
 | Open PR | `gh pr create --title "..." --body "..." --base main --head <branch>` |
 | Merge PR | `gh pr merge --squash --delete-branch` |
 | Cleanup | `git checkout main && git pull origin main && git branch -d <branch> && git fetch origin --prune` |
+
+---
+**Related docs:** [Project README](../README.md) · [Runbook](RUNBOOK.md) · [Algorithm catalog](algorithms.md) · [ADR index](adr/README.md) · [Roadmap](../ROADMAP.md)

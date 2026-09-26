@@ -8,9 +8,23 @@ service/tools.py wrapper functions, so both transports return identical results.
 from typing import Dict, List, Optional
 
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from service import tools
+
+# Request size caps (HTTP only) bound CPU and memory per call; exceeding one returns HTTP 422.
+MAX_LIST_ITEMS = 10_000
+MAX_TEXT_LENGTH = 100_000
+MAX_LCS_LENGTH = 2_000
+MAX_GRAPH_NODES = 1_000
+MAX_GRAPH_EDGES = 10_000
+MAX_KNAPSACK_ITEMS = 1_000
+MAX_KNAPSACK_CAPACITY = 10_000
+MAX_SIEVE_LIMIT = 1_000_000
+MAX_POINTS = 10_000
+MAX_KMEANS_ITERS = 1_000
+MAX_TSP_VERTICES = 200
+MAX_TSP_EDGES = MAX_TSP_VERTICES * (MAX_TSP_VERTICES - 1)
 
 app = FastAPI(
     title="csc-algorithms API",
@@ -28,90 +42,97 @@ def _call(func, *args, **kwargs):
 
 
 class SortRequest(BaseModel):
-    values: List[int]
+    values: List[int] = Field(..., max_length=MAX_LIST_ITEMS)
 
 
 class BinarySearchRequest(BaseModel):
-    sorted_values: List[int]
+    sorted_values: List[int] = Field(..., max_length=MAX_LIST_ITEMS)
     target: int
 
 
 class KmpSearchRequest(BaseModel):
-    text: str
-    pattern: str
+    text: str = Field(..., max_length=MAX_TEXT_LENGTH)
+    pattern: str = Field(..., max_length=MAX_TEXT_LENGTH)
 
 
 class TreeQueryRequest(BaseModel):
-    values: List[int]
+    values: List[int] = Field(..., max_length=MAX_LIST_ITEMS)
     search_for: Optional[int] = None
 
 
 class UnionFindRequest(BaseModel):
-    elements: List[str]
-    unions: List[List[str]]
+    elements: List[str] = Field(..., max_length=MAX_LIST_ITEMS)
+    unions: List[List[str]] = Field(..., max_length=MAX_LIST_ITEMS)
     query: Optional[List[str]] = None
 
 
 class LinkedListRequest(BaseModel):
-    values: List[int]
+    values: List[int] = Field(..., max_length=MAX_LIST_ITEMS)
     search_for: Optional[int] = None
     reverse: bool = False
 
 
 class TrieRequest(BaseModel):
-    words: List[str]
+    words: List[str] = Field(..., max_length=MAX_LIST_ITEMS)
     search_for: Optional[str] = None
     prefix: Optional[str] = None
 
 
 class KnapsackRequest(BaseModel):
-    weights: List[int]
-    values: List[int]
-    capacity: int
+    weights: List[int] = Field(..., max_length=MAX_KNAPSACK_ITEMS)
+    values: List[int] = Field(..., max_length=MAX_KNAPSACK_ITEMS)
+    capacity: int = Field(..., le=MAX_KNAPSACK_CAPACITY)
 
 
 class LcsRequest(BaseModel):
-    first: str
-    second: str
+    first: str = Field(..., max_length=MAX_LCS_LENGTH)
+    second: str = Field(..., max_length=MAX_LCS_LENGTH)
 
 
 class WeightedGraphRequest(BaseModel):
-    graph: Dict[str, List[List[object]]]
+    graph: Dict[str, List[List[object]]] = Field(..., max_length=MAX_GRAPH_NODES)
     source: str
 
 
 class AStarRequest(BaseModel):
-    graph: Dict[str, List[List[object]]]
-    positions: Dict[str, List[float]]
+    graph: Dict[str, List[List[object]]] = Field(..., max_length=MAX_GRAPH_NODES)
+    positions: Dict[str, List[float]] = Field(..., max_length=MAX_GRAPH_NODES)
     source: str
     target: str
 
 
 class TopologicalSortRequest(BaseModel):
-    graph: Dict[str, List[str]]
+    graph: Dict[str, List[str]] = Field(..., max_length=MAX_GRAPH_NODES)
 
 
 class GraphTraversalRequest(BaseModel):
-    graph: Dict[str, List[str]]
+    graph: Dict[str, List[str]] = Field(..., max_length=MAX_GRAPH_NODES)
     source: str
 
 
 class KruskalRequest(BaseModel):
-    vertices: List[str]
-    edges: List[List[object]]
+    vertices: List[str] = Field(..., max_length=MAX_GRAPH_NODES)
+    edges: List[List[object]] = Field(..., max_length=MAX_GRAPH_EDGES)
+
+
+class TravelingSalesmanRequest(BaseModel):
+    vertices: List[str] = Field(..., max_length=MAX_TSP_VERTICES)
+    edges: List[List[object]] = Field(..., max_length=MAX_TSP_EDGES)
+    start: Optional[str] = None
+    method: str = "auto"
 
 
 class HuffmanEncodeRequest(BaseModel):
-    text: str
+    text: str = Field(..., max_length=MAX_TEXT_LENGTH)
 
 
 class HuffmanDecodeRequest(BaseModel):
-    encoded_bits: str
-    codebook: Dict[str, str]
+    encoded_bits: str = Field(..., max_length=MAX_TEXT_LENGTH * 32)
+    codebook: Dict[str, str] = Field(..., max_length=MAX_LIST_ITEMS)
 
 
 class SieveRequest(BaseModel):
-    limit: int
+    limit: int = Field(..., le=MAX_SIEVE_LIMIT)
 
 
 class GcdRequest(BaseModel):
@@ -120,17 +141,18 @@ class GcdRequest(BaseModel):
 
 
 class ParenthesesRequest(BaseModel):
-    text: str
+    text: str = Field(..., max_length=MAX_TEXT_LENGTH)
 
 
 class ClusterRequest(BaseModel):
-    points: List[List[float]]
+    points: List[List[float]] = Field(..., max_length=MAX_POINTS)
     k: int
-    max_iters: int = 100
+    max_iters: int = Field(100, ge=1, le=MAX_KMEANS_ITERS)
+    seed: int = 42
 
 
 class PcaRequest(BaseModel):
-    points: List[List[float]]
+    points: List[List[float]] = Field(..., max_length=MAX_POINTS)
     n_components: int
 
 
@@ -271,6 +293,18 @@ def graph_kruskal(request: KruskalRequest) -> Dict:
     return _call(tools.graph_kruskal, request.vertices, request.edges)
 
 
+@app.post("/graphs/traveling-salesman")
+def graph_traveling_salesman(request: TravelingSalesmanRequest) -> Dict:
+    """Finds a closed tour visiting every vertex once (method: auto, exact, or heuristic)."""
+    return _call(
+        tools.graph_traveling_salesman,
+        request.vertices,
+        request.edges,
+        request.start,
+        request.method,
+    )
+
+
 @app.post("/compression/huffman/encode")
 def compress_huffman_encode(request: HuffmanEncodeRequest) -> Dict:
     """Compresses text into a bitstring using greedily-built variable-length codes."""
@@ -304,7 +338,13 @@ def validate_parentheses(request: ParenthesesRequest) -> Dict:
 @app.post("/machine-learning/kmeans")
 def ml_kmeans_cluster(request: ClusterRequest) -> Dict:
     """Partitions data points into `k` clusters, returning labels and centroids."""
-    return _call(tools.ml_kmeans_cluster, request.points, request.k, request.max_iters)
+    return _call(
+        tools.ml_kmeans_cluster,
+        request.points,
+        request.k,
+        request.max_iters,
+        request.seed,
+    )
 
 
 @app.post("/machine-learning/pca")

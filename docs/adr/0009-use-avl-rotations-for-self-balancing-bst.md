@@ -8,3 +8,7 @@
   * Requires rebalancing checks on both insertion and deletion, recomputing height and triggering rotations bottom-up via recursion.
   * *Trade-off:* AVL rebalances more aggressively than a Red-Black Tree, so write-heavy workloads with frequent insert/delete cycles incur more rotation overhead in exchange for faster reads.
 
+---
+**ADRs:** Previous: [0008](0008-use-euclidean-heuristic-for-a-star.md) · Next: [0010](0010-use-min-heap-greedy-merge-for-huffman-coding.md) · [ADR index](README.md)  
+**Related docs:** [Project README](../../README.md) · [Algorithm catalog](../algorithms.md) · [Runbook](../RUNBOOK.md) · [Contributing](../CONTRIBUTING.md)
+

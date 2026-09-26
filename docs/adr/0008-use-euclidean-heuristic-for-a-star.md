@@ -8,3 +8,7 @@
   * Requires every node to carry 2D coordinate metadata, adding a data modeling requirement beyond a bare adjacency list.
   * *Trade-off:* The heuristic assumes edge weights are consistent with real-world distances; graphs with weights unrelated to spatial layout should fall back to plain Dijkstra.
 
+---
+**ADRs:** Previous: [0007](0007-use-edge-list-relaxation-for-bellman-ford.md) · Next: [0009](0009-use-avl-rotations-for-self-balancing-bst.md) · [ADR index](README.md)  
+**Related docs:** [Project README](../../README.md) · [Algorithm catalog](../algorithms.md) · [Runbook](../RUNBOOK.md) · [Contributing](../CONTRIBUTING.md)
+

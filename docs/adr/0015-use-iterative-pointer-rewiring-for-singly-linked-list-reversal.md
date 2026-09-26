@@ -8,3 +8,7 @@
   * Tracking a `tail` pointer requires explicit bookkeeping during `delete` (reassigning `tail` when the removed node was the last one) and `reverse` (the old head becomes the new tail), trading a small amount of extra logic for O(1) append performance.
   * *Trade-off:* As a singly-linked (not doubly-linked) structure, there is no O(1) backward traversal or O(1) arbitrary-node deletion without first locating the node via a full scan; this keeps the structure simple and memory-efficient for the append/prepend/reverse-focused use case it targets.
 
+---
+**ADRs:** Previous: [0014](0014-use-bottom-up-divide-and-conquer-merge-for-merge-sort.md) · Next: [0016](0016-use-bottom-up-tabulation-with-backtracking-for-01-knapsack.md) · [ADR index](README.md)  
+**Related docs:** [Project README](../../README.md) · [Algorithm catalog](../algorithms.md) · [Runbook](../RUNBOOK.md) · [Contributing](../CONTRIBUTING.md)
+

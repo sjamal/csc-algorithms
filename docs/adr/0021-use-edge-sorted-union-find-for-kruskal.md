@@ -8,3 +8,7 @@
   * It uses $O(V + E)$ auxiliary space for the disjoint-set state and validated edge list.
   * Negative edge weights are supported because edge ordering, rather than path-distance assumptions, drives selection.
   * Disconnected graphs raise a `ValueError` instead of returning a partial minimum spanning forest.
+
+---
+**ADRs:** Previous: [0020](0020-use-iterative-queue-and-stack-for-bfs-dfs.md) · Next: [0022](0022-use-character-branching-trie-for-prefix-lookups.md) · Related: [0025 Traveling Salesman](0025-use-held-karp-and-two-opt-for-traveling-salesman.md) · [ADR index](README.md)  
+**Related docs:** [Project README](../../README.md) · [Algorithm catalog](../algorithms.md) · [Runbook](../RUNBOOK.md) · [Contributing](../CONTRIBUTING.md)

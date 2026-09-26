@@ -7,3 +7,7 @@
   * Simplifies data operations (Insert, Search, Inorder Traversal) directly without heavy tracking arrays.
   * Offers an intuitive look into binary structure trees.
   * *Trade-off:* Does not self-balance natively. Worst-case shape approaches a linear linked list O(n) if values are inserted in pre-sorted order.
+
+---
+**ADRs:** Previous: [0003](0003-use-lps-array-for-kmp-string-matching.md) · Next: [0005](0005-numpy-vectorized-k-means-clustering.md) · [ADR index](README.md)  
+**Related docs:** [Project README](../../README.md) · [Algorithm catalog](../algorithms.md) · [Runbook](../RUNBOOK.md) · [Contributing](../CONTRIBUTING.md)

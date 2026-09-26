@@ -7,3 +7,7 @@
   * Insert and exact/prefix lookup take $O(L)$ time for a word or prefix of length $L$.
   * The structure uses space proportional to the number of stored character positions.
   * Autocomplete returns deterministic lexical ordering, while duplicate inserts remain idempotent.
+
+---
+**ADRs:** Previous: [0021](0021-use-edge-sorted-union-find-for-kruskal.md) · Next: [0023](0023-use-iterative-euclidean-gcd.md) · [ADR index](README.md)  
+**Related docs:** [Project README](../../README.md) · [Algorithm catalog](../algorithms.md) · [Runbook](../RUNBOOK.md) · [Contributing](../CONTRIBUTING.md)

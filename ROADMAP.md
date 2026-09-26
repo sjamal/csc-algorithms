@@ -49,10 +49,15 @@ This document serves as the long-term architectural roadmap for this learning re
 *   **PageRank (Power Iteration)**: Iterative eigenvector approximation ranking nodes by weighted incoming link importance.
 *   **Fast Inverse Square Root**: Bit-level floating-point approximation technique accelerating $1/\sqrt{x}$ via a single Newton-Raphson refinement step.
 
+### Phase 9: Combinatorial Optimization
+*   **Traveling Salesman Problem**: Exact Held-Karp bitmask dynamic programming for small graphs, paired with a nearest-neighbor 2-opt heuristic for larger ones. (Completed)
+
 ---
 
 ## 🔌 Cross-Cutting: Interoperability
 *   **MCP Server & HTTP API**: Transport-agnostic `service/` layer exposing every implemented algorithm as a stateless MCP tool (stdio) and a REST endpoint (FastAPI), for consumption by agents, chat clients, and other programmatic callers. (Completed)
+*   **HTTP Request Size Limits**: Bounded request schemas protecting the HTTP API from oversized payloads. (Completed)
+*   **Packaging (local)**: `pyproject.toml` enabling `pip install -e '.[dev]'`. (Completed)
 
 ---
 
@@ -60,7 +65,7 @@ This document serves as the long-term architectural roadmap for this learning re
 Ideas under consideration for later inclusion, not yet assigned to a phase:
 *   **CLI**: A command-line interface fronting the `service/tools.py` layer for terminal-based invocation of any algorithm.
 *   **Advanced Service Authentication**: API key/OAuth-based access control for the HTTP API beyond its current open, stateless design.
-*   **Packaging & Distribution**: Publishing this repository as an installable package (e.g., to PyPI) for reuse outside this workspace.
+*   **Packaging & Distribution**: Publishing this repository to PyPI for reuse outside this workspace (local `pyproject.toml` packaging is complete).
 
 ---
 
@@ -69,3 +74,6 @@ Each addition from this roadmap must strive to maintain good engineering standar
 1.  **Strict Compliance**: Explicit adherence to PEP 8 syntax formatting protocols checked via local hooks.
 2.  **Architectural Records**: Every core logic model requires an isolated ADR record filed under `docs/adr/`.
 3.  **Flawless Test Coverage**: Complete validation suite parsing forcing a mandatory **100% test coverage baseline**.
+
+---
+**Related docs:** [Project README](README.md) · [Runbook](docs/RUNBOOK.md) · [Algorithm catalog](docs/algorithms.md) · [ADR index](docs/adr/README.md) · [Contributing](docs/CONTRIBUTING.md)

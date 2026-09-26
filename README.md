@@ -7,34 +7,35 @@ A structured repository dedicated to implementing, analyzing, and documenting fo
 * `src/`: Core Python implementations categorized by algorithmic domain.
 * `service/`: Transport-agnostic wrappers exposing the algorithms via an MCP stdio server and a FastAPI HTTP API.
 * `tests/`: Automated unit tests mirroring the codebase layout to validate edge cases and performance boundaries.
-* `docs/adr/`: Architectural Decision Records tracking the design choices for each algorithm.
+* `docs/adr/`: Architectural Decision Records tracking the design choices for each algorithm ([index](docs/adr/README.md)).
+* `docs/RUNBOOK.md`: Setup, testing, HTTP/MCP usage, sample requests, request limits, and troubleshooting.
 * `docs/CONTRIBUTING.md`: Step-by-step branching, testing, and PR/merge workflow guide.
+* `pyproject.toml`: Package metadata; install with `pip install -e '.[dev]'`.
 
 ## Getting Started
+
+The [runbook](docs/RUNBOOK.md) is the full reference for running and testing. Quick start:
 
 ### Prerequisites
 
 * Python 3.10 or higher
-* pip (Python package installer)
+* [uv](https://docs.astral.sh/uv/) or pip
 
 ### Installation
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com
+   git clone https://github.com/sjamal/csc-algorithms.git
    cd csc-algorithms
    ```
 
-2. Initialize a local virtual environment:
+2. Create a virtual environment and install the package with development dependencies:
    ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows use: venv\Scripts\activate
+   uv venv --python 3.12 .venv
+   uv pip install --python .venv/bin/python -e '.[dev]'
+   source .venv/bin/activate  # On Windows use: .venv\Scripts\activate
    ```
-
-3. Install required development and testing dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+   Or with pip: `python -m venv .venv && source .venv/bin/activate && pip install -e '.[dev]'`.
 
 ## Execution and Testing
 
@@ -44,7 +45,7 @@ The repository uses `pytest` for codebase verification. Run the test suite globa
 pytest tests/
 ```
 
-To run syntax and style validation checks using `flake8` or `black`:
+To run syntax and style validation checks using `black`:
 
 ```bash
 black --check src/ tests/
@@ -70,13 +71,21 @@ Register it with your MCP client by pointing it at this command; consult your cl
 uvicorn service.http_app:app --reload
 ```
 
-Each endpoint mirrors an MCP tool, e.g. `POST /sorting/quicksort`, `POST /graphs/dijkstra`, `POST /machine-learning/kmeans`. Interactive OpenAPI docs are available at `http://127.0.0.1:8000/docs` once the server is running.
+Each endpoint mirrors an MCP tool, e.g. `POST /sorting/quicksort`, `POST /graphs/dijkstra`, `POST /graphs/traveling-salesman`, `POST /machine-learning/kmeans`. Interactive OpenAPI docs are available at `http://127.0.0.1:8000/docs` once the server is running. See the [runbook](docs/RUNBOOK.md#4-running-the-http-api) for sample `curl` requests and MCP client configuration.
+
+## Limitations and Design Notes
+
+* **Stateless service:** Every MCP and HTTP call rebuilds its data structure from the request; no state is kept between calls ([ADR 0000](docs/adr/0000-expose-algorithms-via-mcp-and-http-service-layer.md)).
+* **HTTP request limits:** The HTTP API caps list lengths, string lengths, graph sizes, and numeric bounds, returning HTTP 422 when exceeded ([ADR 0000 amendment](docs/adr/0000-expose-algorithms-via-mcp-and-http-service-layer.md#amendment-http-request-size-limits); [limits table](docs/RUNBOOK.md#request-limits)). The MCP server does not apply these caps.
+* **No authentication:** The HTTP API is open and intended for local or trusted-network use only.
+* **Choosing a transport:** Use MCP for agent and chat-client integrations on the same machine; use HTTP for scripts, notebooks, or services calling over the network.
+* **Educational scope:** Implementations favour clarity and verification over raw performance; see each ADR for trade-offs.
 
 ## Architectural Decision Records (ADRs)
 
-The architectural choices, trade-offs, and design patterns for each algorithm are fully documented below:
+The architectural choices, trade-offs, and design patterns for each algorithm are fully documented below (also available as an [ADR index](docs/adr/README.md)):
 
-* [ADR 0000: Expose Algorithms via MCP and HTTP Service Layer](docs/adr/0000-expose-algorithms-via-mcp-and-http-service-layer.md)
+* [ADR 0000: Expose Algorithms via MCP and HTTP Service Layer](docs/adr/0000-expose-algorithms-via-mcp-and-http-service-layer.md) (includes the HTTP request size limits amendment)
 * [ADR 0001: Hoare Partitioning for Quicksort](docs/adr/0001-use-hoare-partitioning-for-quicksort.md)
 * [ADR 0002: heapq for Dijkstra Priority Queue](docs/adr/0002-use-heapq-for-dijkstra-priority-queue.md)
 * [ADR 0003: LPS Array for KMP String Matching](docs/adr/0003-use-lps-array-for-kmp-string-matching.md)
@@ -101,6 +110,7 @@ The architectural choices, trade-offs, and design patterns for each algorithm ar
 * [ADR 0022: Character-Branching Trie for Prefix Lookups](docs/adr/0022-use-character-branching-trie-for-prefix-lookups.md)
 * [ADR 0023: Iterative Euclidean GCD](docs/adr/0023-use-iterative-euclidean-gcd.md)
 * [ADR 0024: Stack for Valid Parentheses](docs/adr/0024-use-stack-for-valid-parentheses.md)
+* [ADR 0025: Held-Karp and Nearest-Neighbor 2-Opt for the Traveling Salesman Problem](docs/adr/0025-use-held-karp-and-two-opt-for-traveling-salesman.md)
 
 ## Algorithm Catalog
 
@@ -137,4 +147,9 @@ To ensure uniformity, this repository follows strict standards derived from **PE
 17. **In-Place Worst-Case Guarantee:** Heap Sort provides the same $O(n \log n)$ worst-case guarantee as Merge Sort but with $O(1)$ auxiliary space, useful when both adversarial-input resilience and memory constraints matter simultaneously.
 18. **Precondition Responsibility:** Binary Search assumes sorted input and does not validate it; callers must guarantee sortedness themselves, since verifying it would negate the algorithm's logarithmic performance advantage.
 19. **Traversal Input Integrity:** BFS and DFS validate the source and every adjacency reference before traversal, preventing malformed graph payloads from producing partial results; both use iterative state to avoid recursion-depth exhaustion.
+20. **Exponential Solver Cap:** The Held-Karp TSP solver refuses graphs larger than 12 vertices, since its $O(n^2 2^n)$ cost grows explosively; larger inputs use the polynomial nearest-neighbor 2-opt heuristic instead.
+21. **HTTP Request Size Limits:** Every HTTP request model caps collection sizes, string lengths, and numeric bounds so a single oversized payload cannot exhaust server CPU or memory.
+
+---
+**Related docs:** [Runbook](docs/RUNBOOK.md) · [Algorithm catalog](docs/algorithms.md) · [ADR index](docs/adr/README.md) · [Contributing](docs/CONTRIBUTING.md) · [Roadmap](ROADMAP.md) · [License](LICENSE)
 20. **Minimum-Spanning-Tree Integrity:** Kruskal validates vertex and edge references, skips cycle-forming edges with Union-Find, and rejects disconnected graphs instead of returning a partial spanning tree.
