@@ -7,3 +7,7 @@
   * The algorithm runs in $O(\log \min(|a|, |b|))$ time and $O(1)$ space.
   * It returns a non-negative result and defines `gcd(0, 0)` as `0`, matching the module's total-function behavior.
   * Iteration avoids recursion-depth limits and keeps the implementation easy to audit.
+
+---
+**ADRs:** Previous: [0022](0022-use-character-branching-trie-for-prefix-lookups.md) · Next: [0024](0024-use-stack-for-valid-parentheses.md) · [ADR index](README.md)  
+**Related docs:** [Project README](../../README.md) · [Algorithm catalog](../algorithms.md) · [Runbook](../RUNBOOK.md) · [Contributing](../CONTRIBUTING.md)

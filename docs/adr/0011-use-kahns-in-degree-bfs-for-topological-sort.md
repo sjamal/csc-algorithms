@@ -8,3 +8,7 @@
   * Naturally detects cycles: if the final order's length is shorter than the total node count, some nodes never reached a zero in-degree, indicating an unresolvable dependency cycle.
   * *Trade-off:* Unlike a DFS-based topological sort, Kahn's approach requires an explicit up-front in-degree tally pass before traversal begins, trading a small amount of extra bookkeeping for simpler, non-recursive cycle detection.
 
+---
+**ADRs:** Previous: [0010](0010-use-min-heap-greedy-merge-for-huffman-coding.md) · Next: [0012](0012-use-iterative-boolean-marking-for-sieve-of-eratosthenes.md) · [ADR index](README.md)  
+**Related docs:** [Project README](../../README.md) · [Algorithm catalog](../algorithms.md) · [Runbook](../RUNBOOK.md) · [Contributing](../CONTRIBUTING.md)
+

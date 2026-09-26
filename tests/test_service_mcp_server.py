@@ -34,6 +34,7 @@ def test_mcp_tool_registry_contains_all_algorithms():
         "graph_breadth_first_search",
         "graph_depth_first_search",
         "graph_kruskal",
+        "graph_traveling_salesman",
         "compress_huffman_encode",
         "compress_huffman_decode",
         "numeric_sieve_of_eratosthenes",
@@ -180,6 +181,14 @@ def test_mcp_graph_kruskal():
     }
 
 
+def test_mcp_graph_traveling_salesman():
+    """Verifies the TSP tool returns an exact closed tour for a small graph."""
+    edges = [["A", "B", 1], ["B", "C", 1], ["A", "C", 1]]
+    result = mcp_server.graph_traveling_salesman(["A", "B", "C"], edges)
+    assert result["cost"] == 3
+    assert result["method"] == "exact"
+
+
 def test_mcp_compress_huffman_round_trip():
     """Verifies the Huffman encode/decode tools recover the original text."""
     encoded = mcp_server.compress_huffman_encode("abracadabra")
@@ -207,7 +216,7 @@ def test_mcp_validate_parentheses():
 def test_mcp_ml_kmeans_cluster():
     """Verifies the K-Means tool returns JSON-serializable labels and centroids."""
     points = [[0, 0], [0, 1], [10, 10], [10, 11]]
-    result = mcp_server.ml_kmeans_cluster(points, k=2)
+    result = mcp_server.ml_kmeans_cluster(points, k=2, seed=7)
     assert len(result["labels"]) == 4
     assert len(result["centroids"]) == 2
 

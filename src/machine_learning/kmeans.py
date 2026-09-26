@@ -6,9 +6,10 @@ import numpy as np
 class KMeans:
     """Partitions dataset samples into K distinct, optimized clusters."""
 
-    def __init__(self, k: int, max_iters: int = 100) -> None:
+    def __init__(self, k: int, max_iters: int = 100, seed: int = 42) -> None:
         self.k: int = k
         self.max_iters: int = max_iters
+        self.seed: int = seed
         self.centroids: np.ndarray = np.array([])
 
     def fit(self, data: np.ndarray) -> np.ndarray:
@@ -18,8 +19,8 @@ class KMeans:
                 "Dataset elements must exceed or match targeted cluster count 'k'."
             )
 
-        # Explicitly set random seed to make calculations reproducible across tests
-        rng = np.random.default_rng(42)
+        # Seeded generator keeps results reproducible; pass a different seed to explore other initializations
+        rng = np.random.default_rng(self.seed)
         random_indices = rng.choice(len(data), self.k, replace=False)
         self.centroids = data[random_indices].copy()
 

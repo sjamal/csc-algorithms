@@ -13,3 +13,16 @@
   * *Trade-off:* Adding a new transport (e.g., gRPC) or a new algorithm requires touching three files (`tools.py`, `mcp_server.py`, `http_app.py`) instead of one, but keeps each transport's concerns (protocol framing, schema validation) cleanly separated from the algorithm-agnostic adapter logic.
   * Introduces new dependencies (`mcp`, `fastapi`, `uvicorn`, `httpx`) beyond the previously dependency-light `numpy`-only `src/` package; these are isolated to `service/` and its tests, so `src/` remains independently importable without them.
 
+## Amendment: HTTP Request Size Limits
+
+* **Context:** The HTTP API originally accepted unbounded lists, strings, graphs, and numeric limits. Several algorithms are quadratic or worse (LCS, Knapsack, Held-Karp), and the Sieve allocates memory proportional to its limit, so one large request could exhaust CPU or memory.
+* **Decision:** Every Pydantic request model in `service/http_app.py` declares size caps with `Field(max_length=...)` or `Field(le=...)`. Violations are rejected with HTTP 422 before any algorithm runs. The caps are module-level constants (`MAX_LIST_ITEMS`, `MAX_LCS_LENGTH`, `MAX_SIEVE_LIMIT`, and others) documented in the [runbook](../RUNBOOK.md#request-limits).
+* **Consequences:**
+  * Oversized HTTP requests fail fast with a clear validation error instead of degrading the server.
+  * Caps apply at the HTTP boundary only. The MCP server runs as a local stdio process for a single trusted client, and `src/` stays free of transport concerns.
+  * *Trade-off:* Legitimate large workloads must call `src/` directly or raise the constants; limits are sized for teaching examples, not bulk processing.
+
+---
+**ADRs:** Next: [0001](0001-use-hoare-partitioning-for-quicksort.md) · [ADR index](README.md)  
+**Related docs:** [Project README](../../README.md) · [Algorithm catalog](../algorithms.md) · [Runbook](../RUNBOOK.md) · [Contributing](../CONTRIBUTING.md)
+

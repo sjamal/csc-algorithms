@@ -8,3 +8,7 @@
   * Iterative traversal avoids Python recursion-depth limits on large or adversarial graphs.
   * Traversal order is deterministic for deterministic adjacency lists, while disconnected components remain outside the source-rooted result.
   * Malformed edge references fail with a `ValueError` instead of producing partial or misleading traversal output.
+
+---
+**ADRs:** Previous: [0019](0019-use-iterative-midpoint-bisection-for-binary-search.md) · Next: [0021](0021-use-edge-sorted-union-find-for-kruskal.md) · [ADR index](README.md)  
+**Related docs:** [Project README](../../README.md) · [Algorithm catalog](../algorithms.md) · [Runbook](../RUNBOOK.md) · [Contributing](../CONTRIBUTING.md)

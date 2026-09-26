@@ -8,3 +8,7 @@
   * Requires $O(n)$ space for the boolean tracking array, trading memory for the batch-marking speed advantage.
   * *Trade-off:* The full boolean array must be allocated up front, making this approach less suitable than trial division for a single, very large primality check in isolation.
 
+---
+**ADRs:** Previous: [0011](0011-use-kahns-in-degree-bfs-for-topological-sort.md) · Next: [0013](0013-use-union-by-rank-with-path-compression-for-union-find.md) · [ADR index](README.md)  
+**Related docs:** [Project README](../../README.md) · [Algorithm catalog](../algorithms.md) · [Runbook](../RUNBOOK.md) · [Contributing](../CONTRIBUTING.md)
+

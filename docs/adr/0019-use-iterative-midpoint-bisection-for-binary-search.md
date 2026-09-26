@@ -8,3 +8,7 @@
   * The `low + (high - low) // 2` midpoint formula is a defensive habit carried over from languages with fixed-width integers (where `low + high` can overflow); it is unnecessary in Python's arbitrary-precision integers but costs nothing and keeps the implementation portable as a reference pattern.
   * *Trade-off:* The function assumes its input is already sorted and provides no validation of that precondition — enforcing sortedness would cost an extra $O(n)$ pass, defeating the purpose of using binary search in the first place. Callers are responsible for ensuring sorted input.
 
+---
+**ADRs:** Previous: [0018](0018-use-binary-max-heap-for-heap-sort.md) · Next: [0020](0020-use-iterative-queue-and-stack-for-bfs-dfs.md) · [ADR index](README.md)  
+**Related docs:** [Project README](../../README.md) · [Algorithm catalog](../algorithms.md) · [Runbook](../RUNBOOK.md) · [Contributing](../CONTRIBUTING.md)
+

@@ -1,4 +1,4 @@
-"""Comprehensive evaluation suite tracking Bellman-Ford, A*, and Topological Sort operations."""
+"""Comprehensive evaluation suite tracking graph search, ordering, spanning tree, and tour algorithms."""
 
 import pytest
 from src.graphs.bellman_ford import bellman_ford
@@ -7,6 +7,11 @@ from src.graphs.breadth_first_search import breadth_first_search
 from src.graphs.depth_first_search import depth_first_search
 from src.graphs.kruskal import kruskal
 from src.graphs.topological_sort import topological_sort
+from src.graphs.traveling_salesman import (
+    MAX_HELD_KARP_VERTICES,
+    held_karp,
+    nearest_neighbor_two_opt,
+)
 
 
 @pytest.fixture
@@ -230,3 +235,99 @@ def test_kruskal_validates_graph_input(vertices, edges, message):
     """Ensures malformed and disconnected graph inputs raise clear ValueErrors."""
     with pytest.raises(ValueError, match=message):
         kruskal(vertices, edges)
+
+
+SQUARE_EDGES = [
+    ("A", "B", 1),
+    ("B", "C", 1),
+    ("C", "D", 1),
+    ("D", "A", 1),
+    ("A", "C", 2),
+    ("B", "D", 2),
+]
+
+# Nearest-neighbor alone yields cost 25 here; 2-opt must improve it to the optimum 23.
+TWO_OPT_EDGES = [
+    ("A", "B", 8),
+    ("A", "C", 9),
+    ("A", "D", 6),
+    ("A", "E", 6),
+    ("B", "C", 7),
+    ("B", "D", 2),
+    ("B", "E", 4),
+    ("C", "D", 3),
+    ("C", "E", 4),
+    ("D", "E", 5),
+]
+
+
+def test_held_karp_finds_optimal_tour():
+    """Verifies Held-Karp returns the minimum-cost closed tour around a square."""
+    assert held_karp(["A", "B", "C", "D"], SQUARE_EDGES) == (
+        ["A", "D", "C", "B", "A"],
+        4,
+    )
+
+
+def test_held_karp_respects_start_vertex():
+    """Ensures the tour begins and ends at the requested start vertex."""
+    tour, cost = held_karp(["A", "B", "C", "D"], SQUARE_EDGES, start="C")
+
+    assert tour[0] == tour[-1] == "C"
+    assert cost == 4
+
+
+def test_nearest_neighbor_two_opt_improves_greedy_tour():
+    """Verifies 2-opt repairs a suboptimal nearest-neighbor tour to the optimum."""
+    vertices = ["A", "B", "C", "D", "E"]
+
+    heuristic_tour, heuristic_cost = nearest_neighbor_two_opt(vertices, TWO_OPT_EDGES)
+    _, optimal_cost = held_karp(vertices, TWO_OPT_EDGES)
+
+    assert heuristic_cost == optimal_cost == 23
+    assert heuristic_tour[0] == heuristic_tour[-1] == "A"
+    assert sorted(heuristic_tour[:-1]) == vertices
+
+
+@pytest.mark.parametrize("solver", [held_karp, nearest_neighbor_two_opt])
+def test_tsp_trivial_graphs(solver):
+    """Ensures single-vertex and two-vertex graphs return valid closed tours."""
+    assert solver(["A"], []) == (["A"], 0)
+    assert solver(["A", "B"], [("A", "B", 3)]) == (["A", "B", "A"], 6)
+
+
+def test_tsp_keeps_cheapest_duplicate_edge():
+    """Ensures duplicate edges between the same pair resolve to the lowest weight."""
+    edges = [("A", "B", 5), ("B", "A", 2), ("A", "B", 9)]
+
+    assert held_karp(["A", "B"], edges) == (["A", "B", "A"], 4)
+
+
+@pytest.mark.parametrize("solver", [held_karp, nearest_neighbor_two_opt])
+@pytest.mark.parametrize(
+    "vertices, edges, start, message",
+    [
+        ([], [], None, "at least one vertex"),
+        (["A", "A"], [], None, "unique"),
+        (["A", "B"], [("A", "B")], None, "two vertices and a weight"),
+        (["A", "B"], [("A", "C", 1)], None, "undeclared vertex"),
+        (["A", "B"], [("A", "A", 1)], None, "Self-loop"),
+        (["A", "B"], [("A", "B", "far")], None, "numeric"),
+        (["A", "B"], [("A", "B", True)], None, "numeric"),
+        (["A", "B"], [("A", "B", -1)], None, "non-negative"),
+        (["A", "B", "C"], [("A", "B", 1), ("B", "C", 1)], None, "not complete"),
+        (["A", "B"], [("A", "B", 1)], "Z", "Start vertex"),
+    ],
+)
+def test_tsp_validates_graph_input(solver, vertices, edges, start, message):
+    """Ensures malformed, incomplete, and negative-weight inputs raise clear ValueErrors."""
+    with pytest.raises(ValueError, match=message):
+        solver(vertices, edges, start=start)
+
+
+def test_held_karp_rejects_oversized_graphs():
+    """Ensures the exponential exact solver refuses inputs beyond its safe size cap."""
+    vertices = [f"V{i}" for i in range(MAX_HELD_KARP_VERTICES + 1)]
+
+    with pytest.raises(ValueError, match="at most"):
+        held_karp(vertices, [])

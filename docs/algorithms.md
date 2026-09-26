@@ -29,6 +29,7 @@ A compact reference for the algorithms and data structures implemented in this r
 | Breadth-First Search | Explores an unweighted graph level by level from a source vertex. | $O(V + E)$ time; $O(V)$ space. | [Source](../src/graphs/breadth_first_search.py) · [Tests](../tests/test_graphs.py) |
 | Depth-First Search | Explores as far as possible along each branch before backtracking. | $O(V + E)$ time; $O(V)$ space. | [Source](../src/graphs/depth_first_search.py) · [Tests](../tests/test_graphs.py) |
 | Kruskal | Sorts weighted undirected edges and joins components without creating cycles. | $O(E \log E)$ time; $O(V + E)$ space. | [Source](../src/graphs/kruskal.py) · [Tests](../tests/test_graphs.py) |
+| Traveling Salesman | Finds the cheapest closed tour visiting every vertex once: exact Held-Karp for small graphs, nearest-neighbor 2-opt heuristic for larger ones. | Held-Karp $O(n^2 2^n)$ time, $O(n 2^n)$ space (max 12 vertices); 2-opt $O(n^2)$ per pass. | [Source](../src/graphs/traveling_salesman.py) · [Tests](../tests/test_graphs.py) · [ADR](adr/0025-use-held-karp-and-two-opt-for-traveling-salesman.md) |
 
 ## Data Structures
 
@@ -54,9 +55,12 @@ A compact reference for the algorithms and data structures implemented in this r
 | Euclidean Algorithm | Repeatedly replaces a pair with the divisor and remainder to find their GCD. | $O(\log \min(|a|, |b|))$ time; $O(1)$ space. | [Source](../src/numeric/gcd.py) · [Tests](../tests/test_numeric.py) |
 | Sieve of Eratosthenes | Marks composite multiples to enumerate all primes up to a limit. | $O(n \log \log n)$ time; $O(n)$ space. | [Source](../src/numeric/sieve.py) · [Tests](../tests/test_numeric.py) |
 | Huffman Coding | Greedily merges the least-frequent symbols into an optimal prefix-code tree. | $O(n + k \log k)$ construction time for $n$ symbols and $k$ distinct characters. | [Source](../src/compression/huffman.py) · [Tests](../tests/test_compression.py) |
-| K-Means | Iteratively assigns points to the nearest centroid and recomputes centroids. | $O(i k n d)$ for iterations $i$, clusters $k$, samples $n$, and dimensions $d$. | [Source](../src/machine_learning/kmeans.py) · [Tests](../tests/test_machine_learning.py) |
+| K-Means | Iteratively assigns points to the nearest centroid and recomputes centroids. Initialization is seeded (`seed`, default 42) for reproducibility. | $O(i k n d)$ for iterations $i$, clusters $k$, samples $n$, and dimensions $d$. | [Source](../src/machine_learning/kmeans.py) · [Tests](../tests/test_machine_learning.py) |
 | Principal Component Analysis | Projects centered data onto directions of greatest covariance. | Dominated by covariance/eigendecomposition cost; depends on samples and dimensions. | [Source](../src/machine_learning/pca.py) · [Tests](../tests/test_machine_learning.py) |
 
 ## Choosing an Implementation
 
-Use the linked source and tests as the executable reference. The [roadmap](../ROADMAP.md) tracks planned work, while the [ADR index](../README.md#architectural-decision-records-adrs) records the major implementation choices. Service consumers can use the stateless [MCP server](../service/mcp_server.py) or [HTTP API](../service/http_app.py).
+Use the linked source and tests as the executable reference. The [roadmap](../ROADMAP.md) tracks planned work, while the [ADR index](adr/README.md) records the major implementation choices. Service consumers can use the stateless [MCP server](../service/mcp_server.py) or [HTTP API](../service/http_app.py); the [runbook](RUNBOOK.md) shows how to run both, with sample requests.
+
+---
+**Related docs:** [Project README](../README.md) · [Runbook](RUNBOOK.md) · [ADR index](adr/README.md) · [Contributing](CONTRIBUTING.md) · [Roadmap](../ROADMAP.md)

@@ -1,8 +1,8 @@
 """Stdio-based MCP server exposing every csc-algorithms implementation as an agent tool.
 
 Run directly (`python -m service.mcp_server`) or register it with an MCP client
-(Claude Desktop, VS Code, etc.) using stdio transport. See docs/CONTRIBUTING.md
-for a sample client configuration snippet.
+(Claude Desktop, VS Code, etc.) using stdio transport. See docs/RUNBOOK.md
+for sample client configuration snippets.
 """
 
 from typing import Dict, List, Optional
@@ -149,6 +149,17 @@ def graph_kruskal(vertices: List[str], edges: List[List[object]]) -> Dict:
 
 
 @mcp.tool()
+def graph_traveling_salesman(
+    vertices: List[str],
+    edges: List[List[object]],
+    start: Optional[str] = None,
+    method: str = "auto",
+) -> Dict:
+    """Finds a closed tour visiting every vertex once (method: auto, exact, or heuristic)."""
+    return tools.graph_traveling_salesman(vertices, edges, start, method)
+
+
+@mcp.tool()
 def compress_huffman_encode(text: str) -> Dict:
     """Compresses text into a bitstring using greedily-built variable-length codes."""
     return tools.compress_huffman_encode(text)
@@ -179,9 +190,11 @@ def validate_parentheses(text: str) -> Dict:
 
 
 @mcp.tool()
-def ml_kmeans_cluster(points: List[List[float]], k: int, max_iters: int = 100) -> Dict:
+def ml_kmeans_cluster(
+    points: List[List[float]], k: int, max_iters: int = 100, seed: int = 42
+) -> Dict:
     """Partitions data points into `k` clusters, returning labels and centroids."""
-    return tools.ml_kmeans_cluster(points, k, max_iters)
+    return tools.ml_kmeans_cluster(points, k, max_iters, seed)
 
 
 @mcp.tool()

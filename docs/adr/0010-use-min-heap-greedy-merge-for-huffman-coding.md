@@ -8,3 +8,7 @@
   * Reuses the same `heapq` priority-queue pattern already established by Dijkstra and A*, keeping tie-breaking explicit via an auxiliary counter since `HuffmanNode` instances are not natively orderable.
   * *Trade-off:* The single-character edge case (only one unique symbol) has no natural binary split, so it is special-cased to emit a fixed `"0"` code rather than an empty string.
 
+---
+**ADRs:** Previous: [0009](0009-use-avl-rotations-for-self-balancing-bst.md) · Next: [0011](0011-use-kahns-in-degree-bfs-for-topological-sort.md) · [ADR index](README.md)  
+**Related docs:** [Project README](../../README.md) · [Algorithm catalog](../algorithms.md) · [Runbook](../RUNBOOK.md) · [Contributing](../CONTRIBUTING.md)
+

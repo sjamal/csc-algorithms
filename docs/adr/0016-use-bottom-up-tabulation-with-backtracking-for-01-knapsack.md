@@ -8,3 +8,7 @@
   * The iterative tabulation approach avoids Python's recursion depth limits entirely, unlike a naive top-down memoized recursive solution which could hit `RecursionError` on a large item count.
   * *Trade-off:* The full `(items + 1) x (capacity + 1)` matrix is retained in memory to support backtracking; a space-optimized single-row variant would reduce memory to $O(\text{capacity})$ but would lose the ability to reconstruct which items were chosen without additional bookkeeping.
 
+---
+**ADRs:** Previous: [0015](0015-use-iterative-pointer-rewiring-for-singly-linked-list-reversal.md) · Next: [0017](0017-use-bottom-up-tabulation-with-diagonal-backtracking-for-lcs.md) · [ADR index](README.md)  
+**Related docs:** [Project README](../../README.md) · [Algorithm catalog](../algorithms.md) · [Runbook](../RUNBOOK.md) · [Contributing](../CONTRIBUTING.md)
+
